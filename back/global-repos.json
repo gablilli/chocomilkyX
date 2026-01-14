@@ -15,6 +15,7 @@
     { "url": "https://theodyssey.dev/altstore/odysseysource.json" },
     { "url": "https://provenance-emu.com/apps.json" },
     { "url": "https://ish.app/altstore.json" },
+    { "url": "https://raw.githubusercontent.com/tapframe/NuvioStreaming/main/nuvio-source.json" },
     { "url": "https://raw.githubusercontent.com/LiveContainer/LiveContainer/refs/heads/main/apps.json" },
     { "url": "https://raw.githubusercontent.com/Balackburn/YTLitePlusAltstore/main/apps.json" },
     { "url": "https://altstore.oatmealdome.me/" },
