@@ -37,5 +37,3 @@ footer{text-align:center;color:var(--subtle);padding:18px 0;margin-top:auto}
 #importRepo button{padding:12px 16px;border-radius:14px;background:var(--accent);color:#fff;border:0;cursor:pointer;font-weight:600}
 .repo-actions{display:flex;gap:6px}
 .repo-actions .removeBtn{background:rgba(255,255,255,0.06);color:#ff6b6b;border:0;border-radius:10px;padding:6px 10px;cursor:pointer;font-weight:600}
-
-

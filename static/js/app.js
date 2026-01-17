@@ -4,6 +4,8 @@ const backBtn = document.getElementById('backBtn');
 const searchBar = document.getElementById('searchBar');
 const searchInput = document.getElementById('searchInput');
 const toast = document.getElementById('toast');
+const importRepoInput = document.getElementById("importRepoInput");
+const importRepoBtn = document.getElementById("importRepoBtn");
 
 let currentApps = [];
 let viewingRepoUrl = null;
@@ -37,7 +39,7 @@ const loadAllRepos = async (repos) => {
 async function loadRepos() {
   reposArea.innerHTML = `<div class="loading-line">Loading libraries…</div>`;
   try {
-    const res = await fetch("/chocomilky-revived/back/global-repos.json");
+    const res = await fetch("https://gablilli.github.io/chocomilky-revived/back/global-repos.json");
     const globals = await res.json();
     if (!globals.repos || globals.repos.length === 0) {
       reposArea.innerHTML = `<div class="loading-line">No libraries loaded.</div>`;
@@ -74,6 +76,66 @@ async function loadRepos() {
   }
 }
 
+// fetch personal repos
+async function fetchUserRepo(url,useProxy=false){
+  try{
+    const fetchUrl=useProxy?proxy+encodeURIComponent(url):url;
+    const res=await fetch(fetchUrl);
+    if(!res.ok) throw "";
+    const data=await res.json();
+    if(!data.apps||!Array.isArray(data.apps)) throw "";
+    return data;
+  }catch(e){return null}
+}
+
+// personal repo card + remove
+function renderRepoCard(repoData,repoUrl,useProxy=false,isUserRepo=true){
+  const first=repoData.apps[0]||{};
+  const icon=repoData.iconURL||first.iconURL||"";
+  const name=repoData.name||first.name||"Unnamed Repo";
+  const desc = data.description || first.subtitle || first.localizedDescription || "";
+  const div=document.createElement("div");
+  div.className="repo-card";
+  div.dataset.url=repoUrl;
+  div.innerHTML=`
+    <img src="${icon}">
+    <div class="repo-info">
+      <div class="repo-name">${name}</div>
+      <div class="repo-desc">${desc}</div>
+    </div>
+    <div class="repo-actions">
+      <button class="openBtn" data-url="${repoUrl}" data-use-proxy="${useProxy}">Open</button>
+      <button class="copyBtn" data-url="${repoUrl}">Copy</button>
+      ${isUserRepo?`<button class="removeBtn">Remove</button>`:""}
+    </div>`;
+  reposArea.prepend(div);
+}
+
+// local storage helpers
+function getUserRepos(){return JSON.parse(localStorage.getItem("userRepos")||"[]")}
+function saveUserRepo(r){
+  const x=getUserRepos();
+  if(!x.find(e=>e.url===r.url)){x.push(r);localStorage.setItem("userRepos",JSON.stringify(x))}
+}
+function removeUserRepo(url){
+  localStorage.setItem("userRepos",JSON.stringify(getUserRepos().filter(r=>r.url!==url)))
+}
+
+//listener
+importRepoBtn.addEventListener("click",async()=>{
+  const url=importRepoInput.value.trim();
+  if(!url) return;
+  showToast("Importing repo…");
+  let repo=await fetchUserRepo(url);
+  let useProxy=false;
+  if(!repo){repo=await fetchUserRepo(url,true);useProxy=true}
+  if(!repo){showToast("Invalid repo",2000);return}
+  renderRepoCard(repo,url,useProxy,true);
+  saveUserRepo({url,useProxy});
+  importRepoInput.value="";
+  showToast("Repo imported!");
+});
+
 // Handlers
 reposArea.addEventListener("click", (e) => {
   const btn = e.target.closest(".openBtn");
@@ -90,6 +152,16 @@ reposArea.addEventListener("click", (e) => {
   navigator.clipboard.writeText(btn.dataset.url)
     .then(() => showToast("Copied URL"))
     .catch(() => alert("Copy failed"));
+});
+
+// remove button
+reposArea.addEventListener("click",e=>{
+  const btn=e.target.closest(".removeBtn");
+  if(!btn) return;
+  const card=btn.closest(".repo-card");
+  removeUserRepo(card.dataset.url);
+  card.remove();
+  showToast("Repo removed");
 });
 
 async function openRepo(url, useProxy) {
@@ -168,4 +240,11 @@ searchInput.addEventListener("input",()=>{
   renderApps(filtered);
 });
 
-loadRepos();
+loadRepos().then(() => {
+  (async ()=>{
+    for(const r of getUserRepos()){
+      const repo=await fetchUserRepo(r.url,r.useProxy);
+      if(repo) renderRepoCard(repo,r.url,r.useProxy,true);
+    }
+  })();
+});
