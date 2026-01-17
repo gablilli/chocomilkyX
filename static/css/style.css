@@ -32,6 +32,10 @@ h1{margin:0;font-size:22px;font-weight:600}
 #toast{position:fixed;top:18px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);color:#fff;padding:10px 16px;border-radius:12px;display:none;z-index:9999}
 .loading-line{color:#999;text-align:center;padding:14px}
 .skeleton {background: rgba(255,255,255,0.05); height: 100px; border-radius: 16px; animation: pulse 1.2s infinite;}
+#importModal {position: fixed;inset: 0;display: none;align-items: center;justify-content: center;backdrop-filter: blur(10px);background: rgba(0,0,0,0.55);z-index: 10000;}
+#importModal .box {background: var(--card);padding: 22px;border-radius: 18px;width: min(90%, 420px);box-shadow: var(--shadow);display: flex;gap: 12px;}
+#importModal input {flex: 1;padding: 12px 14px;border-radius: 14px;border: 1px solid rgba(255,255,255,0.08);background: rgba(255,255,255,0.04);color: var(--text);}
+#importModal button {padding: 12px 16px;border-radius: 14px;border: 0;background: var(--accent);color: #fff;font-weight: 700;cursor: pointer;}
 @keyframes pulse {0% {opacity:0.5;} 50% {opacity:1;} 100% {opacity:0.5;}}
 footer{text-align:center;color:var(--subtle);padding:18px 0;margin-top:auto}
 @media (max-width:640px){
