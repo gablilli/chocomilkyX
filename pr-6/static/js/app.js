@@ -200,11 +200,11 @@ async function openRepo(url, useProxy) {
 }
 
 function renderApps(apps, append=false){
-  if(!apps || apps.length===0){ 
-    if(!append) appsArea.innerHTML=`<div class="loading-line">No apps found.</div>`; 
+  if(!apps || apps.length === 0){ 
+    if(!append) appsArea.innerHTML = `<div class="loading-line">No apps found.</div>`; 
     return; 
   }
-  if(!append) appsArea.innerHTML="";
+  if(!append) appsArea.innerHTML = "";
 
   apps.forEach(app=>{
     const latest = (app.versions && app.versions.length) ? app.versions[0] : {};
@@ -213,7 +213,7 @@ function renderApps(apps, append=false){
     const downloadURL = app.downloadURL || latest.downloadURL || "#";
     const sizeBytes = latest.size || app.size || 0;
 
-    let sizeText = "Unknown size";
+    let sizeText = "Unknown";
     if(sizeBytes > 1024*1024){
       sizeText = (sizeBytes / (1024*1024)).toFixed(2) + " MB";
     } else if(sizeBytes > 1024){
@@ -225,13 +225,13 @@ function renderApps(apps, append=false){
     const card = document.createElement("div");
     card.className = "card";
     card.innerHTML = `
-      <div class="icon"><img src="${app.iconURL||""}" alt=""></div>
-      <div class="title">${app.name||""}</div>
-      <div class="subtitle">${desc}</div>
-      <div class="meta" style="display:flex;gap:6px;font-size:12px;color:#aaa;margin-bottom:12px;flex-wrap:wrap;">
-        ${version ? `<span class="version">Version ${version}</span>` : ""}
+      <div class="icon"><img src="${app.iconURL || ""}" alt=""></div>
+      <div class="title">${app.name || ""}</div>
+      <div class="meta">
+        ${version ? `<span class="version">v${version}</span>` : ""}
         <span class="size">${sizeText}</span>
       </div>
+      <div class="subtitle">${desc}</div>
       <a class="download" href="${downloadURL}" target="_blank" rel="noopener">Download</a>
     `;
     appsArea.appendChild(card);
