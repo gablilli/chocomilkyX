@@ -69,7 +69,7 @@ async function loadRepos() {
         </div>
       `;
     }
-    reposArea.innerHTML = out;
+    reposArea.insertAdjacentHTML("beforeend", out);
   } catch (err) {
     console.error(err);
     reposArea.innerHTML = `<div class="loading-line">Failed to load libraries.</div>`;
