@@ -51,7 +51,6 @@ async function loadRepos() {
     currentApps = allAppsIndex.slice();
     filteredApps = currentApps.slice();
     loaded = 0;
-    renderNextBatch();
 
     let out = "";
     for (let i = 0; i < reposData.length; i++) {
@@ -166,19 +165,25 @@ function renderNextBatch() {
 function applySearch() {
   const q = searchInput.value.toLowerCase();
   const appsToFilter = viewingRepoUrl ? currentApps : allAppsIndex;
+
   if (!q) {
+    // Home: nessuna query → mostra solo le repo
+    if (!viewingRepoUrl) {
+      reposArea.style.display = "";
+      appsArea.innerHTML = "";
+      filteredApps = [];
+      loaded = 0;
+      return;
+    }
     filteredApps = appsToFilter.slice();
     loaded = 0;
     appsArea.innerHTML = "";
     renderNextBatch();
-    if (!viewingRepoUrl) {
-      reposArea.style.display = "";
-    }
     return;
   }
-  if (!viewingRepoUrl) {
-    reposArea.style.display = "none";
-  }
+
+  if (!viewingRepoUrl) reposArea.style.display = "none";
+
   filteredApps = appsToFilter.filter(app => {
     const latest = (app.versions && app.versions.length) ? app.versions[0] : {};
     const fields = [
@@ -191,6 +196,7 @@ function applySearch() {
     ];
     return fields.some(f => f && f.toLowerCase().includes(q));
   });
+
   loaded = 0;
   appsArea.innerHTML = "";
   renderNextBatch();
@@ -220,7 +226,7 @@ function renderApps(apps, append = false, showRepo = false) {
     if (sizeBytes > 1024*1024) sizeText = (sizeBytes/(1024*1024)).toFixed(2)+" MB";
     else if (sizeBytes > 1024) sizeText = (sizeBytes/1024).toFixed(2)+" KB";
     else if (sizeBytes > 0) sizeText = sizeBytes+" B";
-    const repoNameHtml = app.__repoName ? `<div class="repo-name-home">From: ${app.__repoName}</div>` : "";
+    const repoNameHtml = app.__repoName ? `<div class="repo-meta">From: ${app.__repoName}</div>` : "";
     const card = document.createElement("div");
     card.className = "card";
     card.innerHTML = `
