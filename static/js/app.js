@@ -168,6 +168,7 @@ async function openRepo(url, useProxy) {
   viewingRepoUrl = url;
   window.scrollTo({ top: 0, behavior: "auto" });
   reposArea.style.display = "none";
+  document.getElementById("importRepo").style.display = "none"; // do not show the import bar
   backBtn.style.display = "block";
   searchBar.style.display = "flex";
   appsArea.innerHTML = "";
@@ -239,11 +240,12 @@ function renderApps(apps, append=false){
 }
 
 backBtn.addEventListener("click",()=>{
-  viewingRepoUrl=null;
-  appsArea.innerHTML="";
-  reposArea.style.display="";
-  backBtn.style.display="none";
-  searchBar.style.display="none";
+  viewingRepoUrl = null;
+  appsArea.innerHTML = "";
+  reposArea.style.display = "";
+  document.getElementById("importRepo").style.display = "flex"; // re-enable import bar
+  backBtn.style.display = "none";
+  searchBar.style.display = "none";
   window.scrollTo({ top: 0, behavior: "auto" });
   window.onscroll = null; // reset infinite scroll
 });
