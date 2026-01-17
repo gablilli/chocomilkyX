@@ -217,33 +217,26 @@ function indexRepoApps(repo) {
 }
 
 searchInput.addEventListener("input", () => {
-  const q = searchInput.value.trim().toLowerCase();
+  const q = searchInput.value.toLowerCase();
   if (!q) {
-    if (viewingRepoUrl) {
-      renderApps(currentApps);
-    } else {
-      appsArea.innerHTML = "";
-      reposArea.style.display = "";
-    }
+    renderApps(currentApps.slice(0, 50));
     return;
   }
-  const source = viewingRepoUrl ? currentApps : allAppsIndex;
-  const filtered = source.filter(app => {
-    const latest = (app.versions && app.versions[0]) || {};
-    return [
+  const filtered = (currentApps || []).filter(app => {
+    const latest = (app.versions && app.versions.length) ? app.versions[0] : {};
+    const fields = [
       app.name,
       app.subtitle,
       app.localizedDescription,
-      app.bundleIdentifier,
       app.developerName,
+      app.bundleIdentifier,
       latest.localizedDescription
-    ].some(f => f && f.toLowerCase().includes(q));
+    ];
+    return fields.some(f => typeof f === 'string' && f.toLowerCase().includes(q));
   });
-  if (!viewingRepoUrl) {
-    reposArea.style.display = "none";
-  }
-  renderApps(filtered);
+  renderApps(filtered.slice(0, 50));
 });
+
 // import stuff
 const importModal = document.createElement("div");
 importModal.id = "importModal";
