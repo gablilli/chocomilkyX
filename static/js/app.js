@@ -8,6 +8,7 @@ const importBtn = document.getElementById("importBtn");
 
 let currentApps = [];
 let viewingRepoUrl = null;
+let allAppsIndex = [];
 const proxy = "https://proxy-sooty-ten-88.vercel.app/api/proxy?url=";
 
 // toast
@@ -43,6 +44,17 @@ async function loadRepos() {
       return;
     }
     const reposData = await loadAllRepos(globals.repos);
+    allAppsIndex = [];
+    reposData.forEach(repo => {
+      if (repo.apps && Array.isArray(repo.apps)) {
+        repo.apps.forEach(app => {
+          allAppsIndex.push({
+            ...app,
+            __repoName: repo.name || "Repo"
+          });
+        });
+      }
+    });
     let out = "";
     for (let i = 0; i < reposData.length; i++) {
       const data = reposData[i];
@@ -200,61 +212,127 @@ backBtn.addEventListener("click",()=>{
   window.onscroll=null;
 });
 
-// global search!
-searchInput.addEventListener("input",()=>{
-  const q=searchInput.value.toLowerCase();
-  const allApps=[];
-  document.querySelectorAll('.repo-card').forEach(c=>{
-    const url=c.dataset.url;
-    const useProxy=c.querySelector('.openBtn').dataset.useProxy==="true";
-    allApps.push({url,useProxy});
-  });
-  const results=[];
-  (async ()=>{
-    for(const r of allApps){
-      const repo=await fetchUserRepo(r.url,r.useProxy);
-      if(repo&&repo.apps) results.push(...repo.apps);
+// search!
+searchInput.addEventListener("input", () => {
+  const q = searchInput.value.trim().toLowerCase();
+
+  if (!q) {
+    if (viewingRepoUrl) {
+      renderApps(currentApps);
+    } else {
+      appsArea.innerHTML = "";
     }
-    const filtered=results.filter(app=>{
-      const latest=(app.versions&&app.versions.length)?app.versions[0]:{};
-      const fields=[app.name, app.subtitle, app.localizedDescription, app.developerName, app.bundleIdentifier, latest.localizedDescription];
-      return fields.some(f=>f&&f.toLowerCase().includes(q));
-    });
-    renderApps(filtered);
-  })();
+    return;
+  }
+
+  const source = viewingRepoUrl ? currentApps : allAppsIndex;
+
+  const filtered = source.filter(app => {
+    const latest = (app.versions && app.versions[0]) || {};
+    return [
+      app.name,
+      app.subtitle,
+      app.localizedDescription,
+      app.bundleIdentifier,
+      app.developerName,
+      latest.localizedDescription
+    ].some(f => f && f.toLowerCase().includes(q));
+  });
+
+  renderApps(filtered);
 });
 
-// modal for import
-const importModal=document.createElement("div");
-importModal.id="importModal";
-importModal.style.cssText=`
-position: fixed; top: 60px; left: 50%; transform: translateX(-50%);
-background: var(--card); color: var(--text); padding: 16px; border-radius: 14px;
-box-shadow: var(--shadow); display: none; z-index: 10000; gap: 8px;
+// import stuff
+const importModal = document.createElement("div");
+importModal.id = "importModal";
+importModal.style.cssText = `
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.55);
+backdrop-filter: blur(10px);
+display: none;
+align-items: center;
+justify-content: center;
+z-index: 10000;
 `;
-importModal.innerHTML=`
-<input id="importModalInput" type="url" placeholder="Paste repo JSON URL…" style="padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);width:250px;background:rgba(255,255,255,0.03);color:var(--text)">
-<button id="importModalBtn" style="padding:8px 12px;border-radius:12px;border:0;background:var(--accent);color:#fff;font-weight:700;cursor:pointer">Import</button>
+
+importModal.innerHTML = `
+  <div class="box" style="
+    background: var(--card);
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    display: flex;
+    gap: 10px;
+    width: min(90%, 360px);
+  ">
+    <input id="importModalInput" type="url"
+      placeholder="Paste repo JSON URL…"
+      style="
+        flex:1;
+        padding:12px;
+        border-radius:12px;
+        border:1px solid rgba(255,255,255,0.06);
+        background:rgba(255,255,255,0.03);
+        color:var(--text)
+      ">
+    <button id="importModalBtn"
+      style="
+        padding:12px 16px;
+        border-radius:12px;
+        border:0;
+        background:var(--accent);
+        color:#fff;
+        font-weight:700;
+        cursor:pointer
+      ">
+      Import
+    </button>
+  </div>
 `;
+
 document.body.appendChild(importModal);
-const importModalInput=document.getElementById("importModalInput");
-const importModalBtn=document.getElementById("importModalBtn");
 
-importBtn.addEventListener("click",()=>{importModal.style.display=importModal.style.display==="none"?"flex":"none";importModal.style.alignItems="center";});
+const importModalInput = document.getElementById("importModalInput");
+const importModalBtn = document.getElementById("importModalBtn");
 
-importModalBtn.addEventListener("click",async()=>{
-  const url=importModalInput.value.trim();
-  if(!url) return;
+importModalBtn.addEventListener("click", async () => {
+  const url = importModalInput.value.trim();
+  if (!url) return;
   showToast("Importing repo…");
-  let repo=await fetchUserRepo(url);
-  let useProxy=false;
-  if(!repo){repo=await fetchUserRepo(url,true);useProxy=true;}
-  if(!repo){showToast("Invalid repo",2000);return;}
-  renderRepoCard(repo,url,useProxy,true);
-  saveUserRepo({url,useProxy});
-  importModalInput.value="";
-  importModal.style.display="none";
+  let repo = await fetchUserRepo(url);
+  let useProxy = false;
+  if (!repo) {
+    repo = await fetchUserRepo(url, true);
+    useProxy = true;
+  }
+  if (!repo) {
+    showToast("Invalid repo", 2000);
+    return;
+  }
+  renderRepoCard(repo, url, useProxy, true);
+  saveUserRepo({ url, useProxy });
+
+  importModalInput.value = "";
+  importModal.style.display = "none";
   showToast("Repo imported!");
+});
+
+importBtn.addEventListener("click", () => {
+  importModal.style.display = "flex";
+  importModalInput.focus();
+});
+
+importModal.addEventListener("click", e => {
+  if (e.target === importModal) {
+    importModal.style.display = "none";
+  }
+});
+
+window.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    importModal.style.display = "none";
+  }
 });
 
 loadRepos().then(()=>{(async()=>{
