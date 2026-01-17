@@ -200,20 +200,38 @@ async function openRepo(url, useProxy) {
 }
 
 function renderApps(apps, append=false){
-  if(!apps || apps.length===0){ if(!append) appsArea.innerHTML=`<div class="loading-line">No apps found.</div>`; return; }
-  if(!append) appsArea.innerHTML="";
+  if(!apps || apps.length === 0){ 
+    if(!append) appsArea.innerHTML = `<div class="loading-line">No apps found.</div>`; 
+    return; 
+  }
+  if(!append) appsArea.innerHTML = "";
+
   apps.forEach(app=>{
-    const latest=(app.versions&&app.versions.length)?app.versions[0]:{};
-    const version=latest.version||app.version||"";
-    const desc=app.subtitle||app.localizedDescription||latest.localizedDescription||"";
-    const downloadURL=app.downloadURL||latest.downloadURL||"#";
-    const card=document.createElement("div");
-    card.className="card";
-    card.innerHTML=`
-      <div class="icon"><img src="${app.iconURL||""}" alt=""></div>
-      <div class="title">${app.name||""}</div>
+    const latest = (app.versions && app.versions.length) ? app.versions[0] : {};
+    const version = latest.version || app.version || "";
+    const desc = app.subtitle || app.localizedDescription || latest.localizedDescription || "";
+    const downloadURL = app.downloadURL || latest.downloadURL || "#";
+    const sizeBytes = latest.size || app.size || 0;
+
+    let sizeText = "Unknown";
+    if(sizeBytes > 1024*1024){
+      sizeText = (sizeBytes / (1024*1024)).toFixed(2) + " MB";
+    } else if(sizeBytes > 1024){
+      sizeText = (sizeBytes / 1024).toFixed(2) + " KB";
+    } else if(sizeBytes > 0){
+      sizeText = sizeBytes + " B";
+    }
+
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="icon"><img src="${app.iconURL || ""}" alt=""></div>
+      <div class="title">${app.name || ""}</div>
+      <div class="meta">
+        ${version ? `<span class="version">v${version}</span>` : ""}
+        <span class="size">${sizeText}</span>
+      </div>
       <div class="subtitle">${desc}</div>
-      <div class="version">${version?"Version "+version:""}</div>
       <a class="download" href="${downloadURL}" target="_blank" rel="noopener">Download</a>
     `;
     appsArea.appendChild(card);
