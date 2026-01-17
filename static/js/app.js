@@ -213,6 +213,7 @@ function renderApps(apps, append=false){
     const downloadURL = app.downloadURL || latest.downloadURL || "#";
     const sizeBytes = latest.size || app.size || 0;
 
+    // Formattare dimensione in MB o KB
     const sizeText = sizeBytes > 1024*1024 
       ? (sizeBytes / (1024*1024)).toFixed(2) + " MB"
       : (sizeBytes / 1024).toFixed(2) + " KB";
@@ -223,8 +224,7 @@ function renderApps(apps, append=false){
       <div class="icon"><img src="${app.iconURL||""}" alt=""></div>
       <div class="title">${app.name||""}</div>
       <div class="subtitle">${desc}</div>
-      <div class="version">${version?"Version "+version:""}</div>
-      <div class="size">Size: ${sizeText}</div>
+      <div class="version">${version ? "Version " + version : ""}${version && sizeText ? " • " + sizeText : sizeText}</div>
       <a class="download" href="${downloadURL}" target="_blank" rel="noopener">Download</a>
     `;
     appsArea.appendChild(card);
