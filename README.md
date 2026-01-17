@@ -54,7 +54,7 @@ add an entry like this to the repos json file:
 
 that’s it 🍫
 
-for other contributions, see the contributions file.  
+for other contributions, see the contributing file.  
 
 ## selfhost it - 🚀 getting started
 
