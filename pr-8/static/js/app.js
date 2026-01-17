@@ -9,6 +9,8 @@ const importBtn = document.getElementById("importBtn");
 let currentApps = [];
 let viewingRepoUrl = null;
 let allAppsIndex = [];
+let filteredApps = [];
+let loaded = 0;
 const proxy = "https://proxy-sooty-ten-88.vercel.app/api/proxy?url=";
 
 // toast
@@ -46,8 +48,11 @@ async function loadRepos() {
     const reposData = await loadAllRepos(globals.repos);
     allAppsIndex = [];
     reposData.forEach(indexRepoApps);
-    renderApps(currentApps.slice(0, 50));
     currentApps = allAppsIndex.slice();
+    filteredApps = currentApps.slice();
+    loaded = 0;
+    renderNextBatch();
+
     let out = "";
     for (let i = 0; i < reposData.length; i++) {
       const data = reposData[i];
@@ -139,21 +144,56 @@ async function openRepo(url,useProxy){
     const repo=await res.json();
     const apps=repo.apps||[];
     currentApps=apps;
-    renderApps(apps.slice(0,20));
-    let loaded=20;
-    window.onscroll=()=>{if(window.innerHeight+window.scrollY>=document.body.offsetHeight){if(loaded<apps.length){renderApps(apps.slice(loaded,loaded+20),true);loaded+=20;}}}
+    applySearch();
+    window.onscroll=()=> {
+      if(window.innerHeight+window.scrollY>=document.body.offsetHeight) {
+        if(loaded<filteredApps.length) renderNextBatch();
+      }
+    };
   }catch{
     appsArea.innerHTML=`<div class="loading-line">Error loading repo.</div>`;
   }
 }
 
-// follow the current filter
+// search + scroll
 function renderNextBatch() {
   const batchSize = 20;
   const nextApps = filteredApps.slice(loaded, loaded + batchSize);
-  renderApps(nextApps, true);
+  renderApps(nextApps, loaded > 0, viewingRepoUrl !== null);
   loaded += nextApps.length;
 }
+
+function applySearch() {
+  const q = searchInput.value.toLowerCase();
+  const appsToFilter = viewingRepoUrl ? currentApps : allAppsIndex;
+
+  if (!q) {
+    filteredApps = appsToFilter.slice();
+  } else {
+    filteredApps = appsToFilter.filter(app => {
+      const latest = (app.versions && app.versions.length) ? app.versions[0] : {};
+      const fields = [
+        app.name,
+        app.subtitle,
+        app.localizedDescription,
+        app.developerName,
+        app.bundleIdentifier,
+        latest.localizedDescription
+      ];
+      return fields.some(f => f && f.toLowerCase().includes(q));
+    });
+  }
+
+  loaded = 0;
+  appsArea.innerHTML = "";
+  renderNextBatch();
+}
+
+let searchTimeout;
+searchInput.addEventListener("input", () => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(applySearch, 250);
+});
 
 // render apps cards
 function renderApps(apps, append = false, showRepo = false) {
@@ -219,6 +259,8 @@ backBtn.addEventListener("click",()=>{
   reposArea.style.display="";
   backBtn.style.display="none";
   window.onscroll=null;
+  filteredApps = [];
+  loaded = 0;
 });
 
 // search!
@@ -232,36 +274,6 @@ function indexRepoApps(repo) {
     });
   });
 }
-
-let searchTimeout;
-searchInput.addEventListener("input", () => {
-  clearTimeout(searchTimeout);
-  searchTimeout = setTimeout(() => {
-    const q = searchInput.value.toLowerCase();
-    let appsToFilter = viewingRepoUrl ? currentApps : allAppsIndex;
-    if (!q) {
-      if(viewingRepoUrl){
-        renderApps(currentApps.slice(0, 50));
-      } else {
-        renderApps(allAppsIndex.slice(0, 50));
-      }
-      return;
-    }
-    const filtered = appsToFilter.filter(app => {
-      const latest = (app.versions && app.versions.length) ? app.versions[0] : {};
-      const fields = [
-        app.name,
-        app.subtitle,
-        app.localizedDescription,
-        app.developerName,
-        app.bundleIdentifier,
-        latest.localizedDescription
-      ];
-      return fields.some(f => f && f.toLowerCase().includes(q));
-    });
-    renderApps(filtered.slice(0, 50));
-  }, 250);
-});
 
 // import stuff
 const importModal = document.createElement("div");
