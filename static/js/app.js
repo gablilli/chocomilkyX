@@ -76,7 +76,7 @@ async function loadRepos() {
   }
 }
 
-// personal repos
+// fetch personal repos
 async function fetchUserRepo(url,useProxy=false){
   try{
     const fetchUrl=useProxy?proxy+encodeURIComponent(url):url;
@@ -93,7 +93,7 @@ function renderRepoCard(repoData,repoUrl,useProxy=false,isUserRepo=true){
   const first=repoData.apps[0]||{};
   const icon=repoData.iconURL||first.iconURL||"";
   const name=repoData.name||first.name||"Unnamed Repo";
-  const desc=repoData.description||first.subtitle||"";
+  const desc = data.description || first.subtitle || first.localizedDescription || "";
   const div=document.createElement("div");
   div.className="repo-card";
   div.dataset.url=repoUrl;
