@@ -236,13 +236,28 @@ searchInput.addEventListener("input", () => {
   clearTimeout(searchTimeout);
   searchTimeout = setTimeout(() => {
     const q = searchInput.value.toLowerCase();
-    if (!q) { renderApps(currentApps.slice(0,50)); return; }
-    const filtered = (currentApps || []).filter(app => {
+    let appsToFilter = viewingRepoUrl ? currentApps : allAppsIndex;
+    if (!q) {
+      if(viewingRepoUrl){
+        renderApps(currentApps.slice(0, 50));
+      } else {
+        renderApps(allAppsIndex.slice(0, 50));
+      }
+      return;
+    }
+    const filtered = appsToFilter.filter(app => {
       const latest = (app.versions && app.versions.length) ? app.versions[0] : {};
-      const fields = [app.name, app.subtitle, app.localizedDescription, app.developerName, app.bundleIdentifier, latest.localizedDescription];
+      const fields = [
+        app.name,
+        app.subtitle,
+        app.localizedDescription,
+        app.developerName,
+        app.bundleIdentifier,
+        latest.localizedDescription
+      ];
       return fields.some(f => f && f.toLowerCase().includes(q));
     });
-    renderApps(filtered.slice(0,50));
+    renderApps(filtered.slice(0, 50));
   }, 250);
 });
 
