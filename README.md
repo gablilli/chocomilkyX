@@ -31,11 +31,9 @@
 - minimal and lightweight  
 - personal custom repos
 
----
+## contribute to the project
 
-## I want to add some repos to the library
-
-want to add your favorite repo to chocomilky?
+want to add repos to the library?
 first of all, thank you!
 to proceed:
 
@@ -56,7 +54,9 @@ add an entry like this to the repos json file:
 
 that’s it 🍫
 
-## i want to selfhost it - 🚀 getting started
+for other contributions, see the contributions file.  
+
+## selfhost it - 🚀 getting started
 
 ### clone the repository
 
@@ -80,7 +80,11 @@ ChocoMilkyV2 was the original version of this project, created by chocomilky.
 chocomilkyX continues and updates it with new features, improvements, and bug fixes, while making the library free and opensource.
 This project is a **revived version**, maintaining compatibility with the original repos and adding enhancements.
 
----
+> [!WARNING]  
+> chocomilkyX **does not host any IPA files**.  
+>All downloadable files are provided by the original repositories.  
+>This project simply accesses to them.
+>Users are responsible for complying with the terms and conditions of the original sources.
 
 ## 📄 license
 
