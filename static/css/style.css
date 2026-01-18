@@ -84,6 +84,24 @@ h1 {
   margin-top: 4px;
 }
 
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(4px);
+  margin-right: 6px;
+}
+.badge.version {
+  background: rgba(60, 60, 60, 0.3);
+}
+.badge.size {
+  background: rgba(60, 60, 60, 0.3);
+}
+
 .repo-actions {
   display: flex;
   gap: 8px;
