@@ -56,6 +56,7 @@ h1 {
   box-shadow: var(--shadow);
   flex-wrap: wrap;
   transition: transform 0.2s;
+  position: relative;
 }
 
 .repo-card:hover {
@@ -94,32 +95,14 @@ h1 {
   background: rgba(0,0,0,0.3);
   backdrop-filter: blur(4px);
   margin-right: 6px;
+  z-index: 2;
   position: relative;
 }
-
 .badge.version {
   background: rgba(60, 60, 60, 0.3);
-  position: absolute;
-  top: 4px;
-  left: 4px;
 }
-
 .badge.size {
-  background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.12));
-  position: absolute;
-  bottom: 4px;
-  right: 4px;
-}
-
-/* Riflesso stile iOS */
-.badge.version::after,
-.badge.size::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 50%;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.25), rgba(255,255,255,0));
-  border-radius: inherit;
+  background: rgba(60, 60, 60, 0.3);
 }
 
 .repo-actions {
@@ -140,13 +123,29 @@ h1 {
 .repo-actions button.openBtn {
   background: var(--accent);
   color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.repo-actions button.openBtn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.15);
+  mix-blend-mode: overlay;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  transform: scale(0.8);
+}
+
+.repo-actions button.openBtn:hover::after {
+  opacity: 1;
+  transform: scale(1.2);
 }
 
 .repo-actions button.copyBtn {
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.18);
+  background: #555;
   color: #fff;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.22);
 }
 
 .repo-actions button.removeBtn {
@@ -185,6 +184,7 @@ h1 {
   color: #fff;
   font-weight: 700;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 /* apps */
@@ -196,6 +196,7 @@ h1 {
   flex: 1;
   max-width: 1100px;
   margin: 18px auto;
+  box-sizing: border-box;
 }
 
 .card {
@@ -209,13 +210,32 @@ h1 {
   flex-direction: column;
   align-items: center;
   opacity: 0;
-  transform: translateY(6px);
-  animation: fadeInUp 0.32s var(--ease) forwards;
+  transform: translateY(10px);
+  animation: fadeIn 0.4s forwards;
+  position: relative;
+  overflow: hidden;
 }
 
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(6px);}
-  to { opacity: 1; transform: translateY(0);}
+/* minor reflection on app cards */
+.card::before {
+  content:"";
+  position:absolute;
+  top:0; right:0;
+  width:60px; height:60px;
+  background: radial-gradient(circle at top right, rgba(255,255,255,0.15), transparent 60%);
+  pointer-events:none;
+}
+.card::after {
+  content:"";
+  position:absolute;
+  bottom:0; left:0;
+  width:60px; height:60px;
+  background: radial-gradient(circle at bottom left, rgba(255,255,255,0.15), transparent 60%);
+  pointer-events:none;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .icon img {
@@ -235,17 +255,29 @@ h1 {
   color: var(--subtle);
   font-size: 13px;
   margin-bottom: 8px;
+  word-break: break-word;
 }
 
 .meta {
   display: flex;
+  gap: 6px;
   font-size: 12px;
   color: var(--subtle);
   margin-bottom: 8px;
   justify-content: center;
   flex-wrap: wrap;
-  position: relative;
+  z-index:1;
 }
+
+.meta span {
+  background: rgba(255,255,255,0.1);
+  padding: 2px 8px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.version { font-weight: 500; }
+.size { font-weight: 500; }
 
 .download {
   display: inline-block;
@@ -328,11 +360,12 @@ footer a {
   #searchBar { display: flex; flex-direction: column; margin: 12px; }
   #searchBar button#importBtn { width: 100%; margin-top: 8px; }
 
-  #apps { grid-template-columns: repeat(auto-fill,minmax(140px,1fr)); gap: 12px; padding: 12px; }
-  .card { padding: 12px; }
+  #apps { grid-template-columns: repeat(auto-fill,minmax(140px,1fr)); gap: 12px; padding: 12px; box-sizing:border-box; }
+  .card { padding: 12px; max-width: 100%; box-sizing:border-box; }
   .icon img { width: 56px; height: 56px; }
   .title { font-size: 14px; }
   .subtitle { font-size: 11px; margin-bottom: 6px; }
   .meta { font-size: 11px; gap: 4px; }
   .download { font-size: 12px; padding: 8px 10px; }
+  #repos, .repo-card { max-width: 100%; box-sizing:border-box; overflow: hidden; }
 }
