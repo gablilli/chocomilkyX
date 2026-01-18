@@ -1,29 +1,15 @@
-/* fix overflow */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html, body {
-  width: 100%;
-  overflow-x: hidden;
-}
-
-/*  root  */
 :root {
   --bg: #0d0d0f;
-  --card: rgba(28,28,32,0.85);
+  --card: rgba(28,28,32,0.65);
   --accent: #0a84ff;
   --text: #f5f5f7;
   --subtle: #9ca3af;
   --radius: 18px;
   --shadow: 0 8px 24px rgba(0,0,0,0.4);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
-    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --glass-blur: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 
-/*  base  */
 body {
   margin: 0;
   background: var(--bg);
@@ -45,38 +31,41 @@ h1 {
 }
 
 #container {
-  width: 100%;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 12px 16px 40px;
+  padding: 12px 20px 40px;
 }
 
-/*  repos  */
+/* repo cards */
 #repos {
   display: flex;
   flex-direction: column;
   gap: 12px;
   margin: 18px auto;
   max-width: 800px;
-  width: 100%;
 }
 
 .repo-card {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: var(--card);
+  background: rgba(28,28,32,0.45);
+  backdrop-filter: blur(var(--glass-blur));
   padding: 12px;
-  border-radius: 14px;
+  border-radius: var(--radius);
   box-shadow: var(--shadow);
   flex-wrap: wrap;
-  width: 100%;
+  transition: transform 0.2s;
+}
+
+.repo-card:hover {
+  transform: translateY(-2px);
 }
 
 .repo-card img {
   width: 48px;
   height: 48px;
-  border-radius: 10px;
+  border-radius: 12px;
   object-fit: cover;
 }
 
@@ -98,81 +87,101 @@ h1 {
 .repo-actions {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .repo-actions button {
   padding: 8px 10px;
   border-radius: 12px;
   border: 0;
-  background: var(--accent);
-  color: #fff;
   cursor: pointer;
   font-weight: 700;
+  transition: all 0.2s;
 }
 
-.repo-actions button.copy {
-  background: #444;
+.repo-actions button.openBtn {
+  background: var(--accent);
+  color: #fff;
 }
 
-/*  search  */
+.repo-actions button.copyBtn {
+  background: #555;
+  color: #fff;
+}
+
+.repo-actions button.removeBtn {
+  background: transparent;
+  color: #ff4c4c;
+  border: 1px solid #ff4c4c;
+}
+
+/* Search bar */
 #searchBar {
   display: none;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   margin: 14px auto;
   max-width: 600px;
   gap: 8px;
-  width: 100%;
 }
 
 #searchBar input {
   flex: 1;
-  min-width: 0;
-  padding: 12px;
-  border-radius: 14px;
+  padding: 14px;
+  border-radius: var(--radius);
   border: 1px solid rgba(255,255,255,0.06);
-  background: rgba(255,255,255,0.03);
+  background: rgba(255,255,255,0.06);
   color: var(--text);
+  font-size: 15px;
+  backdrop-filter: blur(var(--glass-blur));
 }
 
 #searchBar button#importBtn {
-  padding: 0 12px;
-  height: 40px;
-  border-radius: 12px;
+  padding: 0 14px;
+  height: 44px;
+  border-radius: var(--radius);
   border: 0;
   background: var(--accent);
   color: #fff;
   font-weight: 700;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
-/*  apps  */
+/* apps */
 #apps {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
   gap: 18px;
   padding: 18px;
   flex: 1;
   max-width: 1100px;
-  width: 100%;
   margin: 18px auto;
 }
 
 .card {
-  background: var(--card);
-  border-radius: 16px;
+  background: rgba(28,28,32,0.45);
+  backdrop-filter: blur(var(--glass-blur));
+  border-radius: var(--radius);
   padding: 16px;
   text-align: center;
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
   align-items: center;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeIn 0.4s forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .icon img {
   width: 72px;
   height: 72px;
-  border-radius: 14px;
+  border-radius: 16px;
   object-fit: cover;
   margin-bottom: 12px;
 }
@@ -190,37 +199,41 @@ h1 {
 
 .meta {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   font-size: 12px;
   color: var(--subtle);
-  margin-bottom: 4px;
+  margin-bottom: 8px;
   justify-content: center;
   flex-wrap: wrap;
 }
 
-.meta .version,
-.meta .size {
-  font-weight: 500;
+.meta span {
+  background: rgba(255,255,255,0.1);
+  padding: 2px 8px;
+  border-radius: 12px;
 }
 
-.card .repo-meta {
-  font-size: 12px;
-  color: var(--subtle);
-  font-weight: 500;
-  margin-top: 2px;
-}
+.version { font-weight: 500; }
+.size { font-weight: 500; }
 
 .download {
   display: inline-block;
   padding: 10px 14px;
-  border-radius: 14px;
+  border-radius: var(--radius);
   background: var(--accent);
   color: #fff;
   text-decoration: none;
   font-weight: 700;
+  margin-top: 6px;
+  transition: all 0.2s;
 }
 
-/*  other things  */
+.download:hover {
+  filter: brightness(1.1) saturate(1.2);
+  box-shadow: 0 4px 16px rgba(10,132,255,0.5);
+}
+
+/* back button */
 #backBtn {
   display: none;
   margin: 8px auto;
@@ -228,9 +241,10 @@ h1 {
   color: #fff;
   border: 0;
   padding: 10px 16px;
-  border-radius: 14px;
+  border-radius: var(--radius);
   cursor: pointer;
   font-weight: 700;
+  transition: all 0.2s;
 }
 
 #toast {
@@ -260,11 +274,12 @@ h1 {
 }
 
 @keyframes pulse {
-  0% { opacity: 0.5; }
-  50% { opacity: 1; }
-  100% { opacity: 0.5; }
+  0% { opacity:0.5; }
+  50% { opacity:1; }
+  100% { opacity:0.5; }
 }
 
+/* footer */
 footer {
   text-align: center;
   color: var(--subtle);
@@ -272,77 +287,21 @@ footer {
   margin-top: auto;
 }
 
-/*  mobile fixes  */
-@media (max-width: 640px) {
+footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
 
-  /* repos */
-  #repos {
-    margin: 12px 0;
-  }
+/* mobile */
+@media (max-width:640px) {
+  #searchBar { display: flex; flex-direction: column; margin: 12px; }
+  #searchBar button#importBtn { width: 100%; margin-top: 8px; }
 
-  .repo-card {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .repo-info {
-    min-width: 0;
-    width: 100%;
-  }
-
-  .repo-actions {
-    width: 100%;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .repo-actions button {
-    width: 100%;
-  }
-
-  /* search */
-  #searchBar {
-    padding: 0 4px;
-  }
-
-  #searchBar input,
-  #searchBar button {
-    width: 100%;
-  }
-
-  /* apps */
-  #apps {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 12px 8px;
-    gap: 12px;
-    margin: 0;
-  }
-
-  .card {
-    padding: 12px;
-  }
-
-  .icon img {
-    width: 56px;
-    height: 56px;
-    margin-bottom: 8px;
-  }
-
-  .title {
-    font-size: 14px;
-  }
-
-  .subtitle {
-    font-size: 11px;
-  }
-
-  .meta {
-    font-size: 11px;
-    gap: 6px;
-  }
-
-  .download {
-    font-size: 12px;
-    padding: 8px 10px;
-  }
+  #apps { grid-template-columns: repeat(auto-fill,minmax(140px,1fr)); gap: 12px; padding: 12px; }
+  .card { padding: 12px; }
+  .icon img { width: 56px; height: 56px; }
+  .title { font-size: 14px; }
+  .subtitle { font-size: 11px; margin-bottom: 6px; }
+  .meta { font-size: 11px; gap: 4px; }
+  .download { font-size: 12px; padding: 8px 10px; }
 }
