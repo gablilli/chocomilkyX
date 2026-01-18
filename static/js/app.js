@@ -222,22 +222,35 @@ function renderApps(apps, append = false, showRepo = false) {
     else if (sizeBytes > 1024) sizeText = (sizeBytes/1024).toFixed(2)+" KB";
     else if (sizeBytes > 0) sizeText = sizeBytes+" B";
     const repoNameHtml = app.__repoName ? `<div class="repo-meta">From: ${app.__repoName}</div>` : "";
+
     const card = document.createElement("div");
     card.className = "card";
+    card.style.opacity = 0;
+    card.style.transition = "opacity 0.4s ease";
     card.innerHTML = `
       <div class="icon"><img loading="lazy" src="${app.iconURL || ''}" alt=""></div>
       <div class="title">${app.name || ""}</div>
       <div class="meta">
-        ${version ? `<span class="version">v${version}</span>` : ""}
-        <span class="size">${sizeText}</span>
+        ${version ? `<span class="badge version">v${version}</span>` : ""}
+        <span class="badge size">${sizeText}</span>
       </div>
       ${repoNameHtml}
       <div class="subtitle">${desc}</div>
       <a class="download" href="${downloadURL}" target="_blank" rel="noopener">Download</a>
     `;
     appsArea.appendChild(card);
+
+    // fadein
+    setTimeout(() => card.style.opacity = 1, 20);
   });
 }
+
+// icon fallback
+document.addEventListener('error', function(e){
+  if(e.target.tagName.toLowerCase() === 'img'){
+    e.target.src = 'https://i.sstatic.net/y3igBw0w.jpg';
+  }
+}, true);
 
 // events
 reposArea.addEventListener("click",e=>{
@@ -282,7 +295,7 @@ function indexRepoApps(repo) {
   });
 }
 
-// import stuff
+// create the modal
 const importModal = document.createElement("div");
 importModal.id = "importModal";
 importModal.style.cssText = `
@@ -333,9 +346,35 @@ importModal.innerHTML = `
 
 document.body.appendChild(importModal);
 
-const importModalInput = document.getElementById("importModalInput");
-const importModalBtn = document.getElementById("importModalBtn");
+// fade
+importModal.style.opacity = 0;
+importModal.style.transition = "opacity 0.3s";
 
+// open modal
+importBtn.addEventListener("click", () => {
+  importModal.style.display = "flex";
+  importModalInput.focus();
+  // timeout for the transition
+  setTimeout(() => importModal.style.opacity = 1, 10);
+});
+
+// close modal
+importModal.addEventListener("click", e => {
+  if (e.target === importModal) {
+    importModal.style.opacity = 0;
+    setTimeout(() => importModal.style.display = "none", 300);
+  }
+});
+
+// esc close
+window.addEventListener("keydown", e => {
+  if (e.key === "Escape") {
+    importModal.style.opacity = 0;
+    setTimeout(() => importModal.style.display = "none", 300);
+  }
+});
+
+// close with fadee after import
 importModalBtn.addEventListener("click", async () => {
   const url = importModalInput.value.trim();
   if (!url) return;
@@ -353,26 +392,12 @@ importModalBtn.addEventListener("click", async () => {
   renderRepoCard(repo, url, useProxy, true);
   saveUserRepo({ url, useProxy });
 
+  // fade out
+  importModal.style.opacity = 0;
+  setTimeout(() => importModal.style.display = "none", 300);
+
   importModalInput.value = "";
-  importModal.style.display = "none";
   showToast("Repo imported!");
-});
-
-importBtn.addEventListener("click", () => {
-  importModal.style.display = "flex";
-  importModalInput.focus();
-});
-
-importModal.addEventListener("click", e => {
-  if (e.target === importModal) {
-    importModal.style.display = "none";
-  }
-});
-
-window.addEventListener("keydown", e => {
-  if (e.key === "Escape") {
-    importModal.style.display = "none";
-  }
 });
 
 loadRepos().then(() => {
