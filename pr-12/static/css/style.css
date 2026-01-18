@@ -1,364 +1,222 @@
-/* root (theme) */
 :root {
-  --bg: #000;
-  --card: rgba(28,28,30,.72);
+  --bg: #0d0d0f;
+  --card: rgba(28,28,32,0.85);
   --accent: #0a84ff;
   --text: #f5f5f7;
-  --subtle: #8e8e93;
-  --radius: 16px;
-  --shadow: 0 12px 30px rgba(0,0,0,.45);
+  --subtle: #9ca3af;
+  --radius: 18px;
+  --shadow: 0 8px 24px rgba(0,0,0,0.4);
+
+  --stroke: rgba(255,255,255,0.08);
+  --stroke2: rgba(255,255,255,0.06);
   --ease: cubic-bezier(.2,.8,.2,1);
+
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+  color-scheme: dark;
 }
 
-/* global fix */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
 
-html, body {
-  width: 100%;
-  overflow-x: hidden;
+body {
+  margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
-  margin: 0;
-  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
+/* header */
 header {
-  padding: 28px 20px;
-  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding: calc(env(safe-area-inset-top) + 16px) 20px 16px;
+  backdrop-filter: blur(14px);
+  background: rgba(13,13,15,.55);
+  border-bottom: 1px solid rgba(255,255,255,.05);
 }
 
 h1 {
   margin: 0;
   font-size: 22px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 /* container */
 #container {
-  max-width: 980px;
-  margin: auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* search bar */
-#searchBar {
-  display: none;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-#searchInput {
-  flex: 1;
-  padding: 10px 14px;
-  border-radius: var(--radius);
-  border: 1px solid rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.03);
-  color: var(--text);
-  font-size: 16px;
-  outline: none;
-  transition: border-color .2s ease;
-}
-
-#searchInput:focus {
-  border-color: var(--accent);
-}
-
-#searchBtn {
-  padding: 10px 16px;
-  border-radius: var(--radius);
-  border: none;
-  background: var(--accent);
-  color: #fff;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform .18s var(--ease), box-shadow .18s var(--ease);
-}
-
-#searchBtn:active {
-  transform: scale(.96);
-  box-shadow: 0 6px 12px rgba(10,132,255,.28);
-}
-
-/* repo list */
-.repo-card {
-  display: flex;
-  gap: 12px;
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 14px;
-  margin-bottom: 12px;
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  align-items: center;
-}
-
-.repo-card img {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  border-radius: var(--radius);
-  flex-shrink: 0;
-}
-
-.repo-info {
-  flex: 1;
-}
-
-.repo-name {
-  font-weight: 700;
-  font-size: 16px;
-  margin-bottom: 4px;
-}
-
-.repo-desc {
-  font-size: 14px;
-  color: var(--subtle);
-}
-
-.repo-actions {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-/* copy button */
-.repo-actions .copyBtn {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.10);
-  color: var(--text);
-  box-shadow: none;
-  cursor: pointer;
-}
-
-.repo-actions .copyBtn:active {
-  background: rgba(255,255,255,0.12);
-  transform: scale(.96);
-  box-shadow: none;
-}
-
-/* buttons */
-button,
-#importBtn,
-#importModal button {
-  appearance: none;
-  border: none;
-  border-radius: 999px;
-  padding: 10px 14px;
-  font-weight: 700;
-  background: var(--accent);
-  color: #fff;
-  cursor: pointer;
-  min-height: 40px;
-  transition: transform .18s var(--ease), box-shadow .18s var(--ease), background-color .18s var(--ease);
-}
-
-button:active,
-#importBtn:active,
-#importModal button:active {
-  transform: scale(.96);
-  box-shadow: 0 6px 12px rgba(10,132,255,.28);
-  filter: brightness(1.05);
-}
-
-/* download button inside card */
-.card .download {
-  margin-top: auto;
-  font-size: 14px;
-  padding: 8px 0;
-  text-align: center;
-  text-decoration: underline;
-  border-radius: var(--radius);
-  background: var(--accent);
-  color: #fff;
-  font-weight: 700;
-  cursor: pointer;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 12px 20px 40px;
   width: 100%;
-  transition: transform .18s var(--ease), box-shadow .18s var(--ease), filter .18s var(--ease);
 }
 
-.card .download:active {
-  transform: scale(.96);
-  box-shadow: 0 6px 12px rgba(10,132,255,.28);
-  filter: brightness(1.05);
-}
-
-/* remove button */
-.repo-actions .removeBtn {
-  background: rgba(255,69,58,.22);
-  border: 1px solid rgba(255,69,58,.35);
-  box-shadow: none;
-}
-
-.repo-actions .removeBtn:active {
-  background: rgba(255,69,58,.32);
-  box-shadow: 0 6px 14px rgba(255,69,58,.35);
-}
-
-/* apps grid */
-#apps {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 14px;
-  margin-top: 10px;
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 12px;
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  transition: transform .2s var(--ease);
-}
-
-.card:hover {
-  transform: translateY(-2px);
-}
-
-.card .icon {
-  width: 100%;
-  aspect-ratio: 1/1;
-  overflow: hidden;
-  border-radius: var(--radius);
-  margin-bottom: 8px;
-}
-
-.card .icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.card .title {
-  font-weight: 700;
-  margin-bottom: 4px;
-  font-size: 14px;
-}
-
-.card .subtitle {
-  font-size: 12px;
-  color: var(--subtle);
-  margin-bottom: 8px;
-  flex: 1;
-}
-
-.card .repo-meta {
-  font-size: 12px;
-  color: var(--subtle);
-  font-weight: 600;
-  margin-bottom: 4px;
-  opacity: .9;
-}
-
-.meta {
-  display: flex;
-  gap: 6px;
-  flex-wrap: nowrap;
-  margin-bottom: 6px;
-}
-
-.meta .version,
-.meta .size {
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.08);
-  background: rgba(255,255,255,.04);
-  font-size: 11px;
-}
-
-/* back button */
-#backBtn {
-  display: none;
-  background: var(--accent);
-  padding: 10px 16px;
-  border-radius: var(--radius);
-  font-weight: 700;
-  color: #fff;
-  cursor: pointer;
-  border: none;
-  transition: transform .18s var(--ease), box-shadow .18s var(--ease);
-}
-
-#backBtn:active {
-  transform: scale(.96);
-  box-shadow: 0 6px 12px rgba(10,132,255,.28);
-}
-
-/* fade in */
+/* fade */
 .fade-in {
   animation: fadeInUp .32s var(--ease) both;
 }
-
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* import modal */
-#importModal {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .22s var(--ease);
+/* search */
+#searchBar {
+  display: flex;
+  gap: 8px;
+  max-width: 600px;
+  margin: 14px auto;
 }
 
-#importModal.show {
-  opacity: 1;
-  pointer-events: auto;
+#searchBar input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.04);
+  color: var(--text);
 }
 
-#importModal .box {
-  transform: scale(.96);
-  opacity: 0;
-  transition: transform .22s var(--ease), opacity .22s var(--ease);
+/* download open import btn */
+.download,
+.openBtn,
+#importBtn,
+#addRepoBtn {
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform .2s var(--ease);
 }
 
-#importModal.show .box {
-  transform: scale(1);
-  opacity: 1;
+.download::after,
+.openBtn::after,
+#importBtn::after,
+#addRepoBtn::after {
+  content:'';
+  position:absolute;
+  inset:0;
+  background: rgba(255,255,255,.1);
+  mix-blend-mode: color-dodge;
+  opacity:0;
+  transition: opacity .3s;
 }
 
-/* footer */
-footer {
+.download:hover::after,
+.openBtn:hover::after,
+#importBtn:hover::after,
+#addRepoBtn:hover::after {
+  opacity:1;
+}
+
+/* libraries back button */
+#backBtn {
+  display: none;
+  margin: 10px auto;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  font-weight: 700;
+}
+body.repo-open #backBtn { display: inline-block; }
+
+/* repos */
+#repos {
+  max-width: 800px;
+  margin: 10px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.repo-card {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: linear-gradient(180deg, rgba(28,28,32,.9), rgba(28,28,32,.78));
+  border-radius: 14px;
+  border: 1px solid var(--stroke2);
+  box-shadow: var(--shadow);
+}
+
+/* grid */
+#apps {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
+  gap: 18px;
+  padding: 18px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+/* app card */
+.card {
+  position: relative;
+  padding: 16px;
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(28,28,32,.9), rgba(28,28,32,.78));
+  border: 1px solid var(--stroke2);
+  box-shadow: var(--shadow);
   text-align: center;
-  margin-top: 40px;
-  font-size: 18px;
-  color: var(--subtle);
 }
 
-/* mobile fix */
-@media (max-width: 640px) {
-  #container { padding: 12px; }
-  
+/* reflection only on corners */
+.card::before,
+.card::after {
+  content:'';
+  position:absolute;
+  width:22px;
+  height:22px;
+  border:2px solid rgba(255,255,255,.08);
+  border-radius:12px;
+  pointer-events:none;
+}
+.card::before {
+  top:2px; right:2px;
+  border-left:none;
+  border-bottom:none;
+}
+.card::after {
+  bottom:2px; left:2px;
+  border-top:none;
+  border-right:none;
+}
+
+/* size-version */
+.meta {
+  display:flex;
+  gap:8px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-bottom:8px;
+}
+
+.meta .size,
+.meta .version {
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.04);
+  font-weight:700;
+  font-size:12px;
+}
+
+/* mobile */
+@media (max-width:640px) {
+  #searchBar { flex-direction: column; }
+  #apps {
+    grid-template-columns: repeat(auto-fill,minmax(140px,1fr));
+    padding: 12px;
+  }
   .repo-card {
     flex-direction: column;
-    align-items: flex-start;
   }
-
-  .repo-actions {
-    width: 100%;
-    margin-top: 8px;
-    justify-content: flex-start;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-
-  .repo-actions button {
-    width: 48%;
-    margin-top: 4px;
-  }
-
-  #apps { grid-template-columns: repeat(2, 1fr); padding: 0; }
 }
