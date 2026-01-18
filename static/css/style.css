@@ -27,6 +27,11 @@ html, body {
   padding: 0;
 }
 
+header {
+  padding: 28px 20px;
+  text-align: center;
+}
+
 /* container */
 #container {
   max-width: 980px;
@@ -296,7 +301,7 @@ button:active,
 footer {
   text-align: center;
   margin-top: 40px;
-  font-size: 12px;
+  font-size: 18px;
   color: var(--subtle);
 }
 
