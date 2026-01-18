@@ -34,6 +34,7 @@ h1 {
   max-width: 1100px;
   margin: 0 auto;
   padding: 12px 20px 40px;
+  box-sizing: border-box;
 }
 
 /* repo cards */
@@ -55,12 +56,11 @@ h1 {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   flex-wrap: wrap;
-  transition: transform 0.2s;
+  transition: transform 0.2s, opacity 0.4s;
   position: relative;
-}
-
-.repo-card:hover {
-  transform: translateY(-2px);
+  opacity: 0;
+  animation: fadeIn 0.4s forwards;
+  box-sizing: border-box;
 }
 
 .repo-card img {
@@ -83,6 +83,7 @@ h1 {
   color: var(--subtle);
   font-size: 13px;
   margin-top: 4px;
+  word-break: break-word;
 }
 
 .badge {
@@ -97,6 +98,7 @@ h1 {
   margin-right: 6px;
   z-index: 2;
   position: relative;
+  white-space: nowrap;
 }
 .badge.version {
   background: rgba(60, 60, 60, 0.3);
@@ -144,7 +146,9 @@ h1 {
 }
 
 .repo-actions button.copyBtn {
-  background: #555;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: none;
   color: #fff;
 }
 
@@ -214,24 +218,17 @@ h1 {
   animation: fadeIn 0.4s forwards;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
-/* minor reflection on app cards */
+/* reflections */
 .card::before {
   content:"";
   position:absolute;
-  top:0; right:0;
-  width:60px; height:60px;
-  background: radial-gradient(circle at top right, rgba(255,255,255,0.15), transparent 60%);
+  inset:0;
+  border-radius: var(--radius);
   pointer-events:none;
-}
-.card::after {
-  content:"";
-  position:absolute;
-  bottom:0; left:0;
-  width:60px; height:60px;
-  background: radial-gradient(circle at bottom left, rgba(255,255,255,0.15), transparent 60%);
-  pointer-events:none;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%, rgba(255,255,255,0.08) 100%);
 }
 
 @keyframes fadeIn {
@@ -367,5 +364,5 @@ footer a {
   .subtitle { font-size: 11px; margin-bottom: 6px; }
   .meta { font-size: 11px; gap: 4px; }
   .download { font-size: 12px; padding: 8px 10px; }
-  #repos, .repo-card { max-width: 100%; box-sizing:border-box; overflow: hidden; }
+  #repos, .repo-card { max-width: 100%; box-sizing:border-box; overflow: hidden; animation: fadeIn 0.4s forwards; }
 }
