@@ -163,18 +163,25 @@ function renderNextBatch() {
 }
 
 function applySearch() {
-  const q = searchInput.value.toLowerCase();
+  const q = searchInput.value.trim().toLowerCase();
   const appsToFilter = viewingRepoUrl ? currentApps : allAppsIndex;
 
   if (!q) {
     if (!viewingRepoUrl) {
       reposArea.style.display = "";
       appsArea.innerHTML = "";
+
+      [...reposArea.children].forEach(el => {
+        el.classList.remove("fade-in");
+        requestAnimationFrame(() => el.classList.add("fade-in"));
+      });
+
       filteredApps = [];
       loaded = 0;
       window.onscroll = null;
       return;
     }
+
     filteredApps = appsToFilter.slice();
     loaded = 0;
     appsArea.innerHTML = "";
@@ -184,7 +191,9 @@ function applySearch() {
 
   if (!viewingRepoUrl) reposArea.style.display = "none";
 
-  filteredApps = appsToFilter.filter(app => app.name && app.name.toLowerCase().includes(q));
+  filteredApps = appsToFilter.filter(app =>
+    app.name && app.name.toLowerCase().includes(q)
+  );
 
   loaded = 0;
   appsArea.innerHTML = "";
@@ -204,14 +213,15 @@ searchInput.addEventListener("input", () => {
 });
 
 // render apps cards
-function renderApps(apps, append = false, showRepo = false) {
+function renderApps(apps, append = false) {
   if (!apps || apps.length === 0) {
     if (!append) appsArea.innerHTML = `<div class="loading-line">No apps found.</div>`;
     return;
   }
+
   if (!append) appsArea.innerHTML = "";
 
-  apps.forEach(app => {
+  apps.forEach((app, i) => {
     const latest = (app.versions && app.versions.length) ? app.versions[0] : {};
     const version = latest.version || app.version || "";
     const desc = app.subtitle || app.localizedDescription || latest.localizedDescription || "";
@@ -221,9 +231,13 @@ function renderApps(apps, append = false, showRepo = false) {
     if (sizeBytes > 1024*1024) sizeText = (sizeBytes/(1024*1024)).toFixed(2)+" MB";
     else if (sizeBytes > 1024) sizeText = (sizeBytes/1024).toFixed(2)+" KB";
     else if (sizeBytes > 0) sizeText = sizeBytes+" B";
-    const repoNameHtml = app.__repoName ? `<div class="repo-meta">From: ${app.__repoName}</div>` : "";
+    const repoNameHtml = app.__repoName
+      ? `<div class="repo-meta">From: ${app.__repoName}</div>`
+      : "";
     const card = document.createElement("div");
-    card.className = "card";
+    card.className = "card fade-in";
+    card.style.animationDelay = `${i * 40}ms`;
+
     card.innerHTML = `
       <div class="icon"><img loading="lazy" src="${app.iconURL || ''}" alt=""></div>
       <div class="title">${app.name || ""}</div>
@@ -235,6 +249,7 @@ function renderApps(apps, append = false, showRepo = false) {
       <div class="subtitle">${desc}</div>
       <a class="download" href="${downloadURL}" target="_blank" rel="noopener">Download</a>
     `;
+
     appsArea.appendChild(card);
   });
 }
@@ -359,20 +374,22 @@ importModalBtn.addEventListener("click", async () => {
 });
 
 importBtn.addEventListener("click", () => {
+  importModal.classList.add("show");
   importModal.style.display = "flex";
   importModalInput.focus();
 });
 
+function closeImportModal() {
+  importModal.classList.remove("show");
+  setTimeout(() => importModal.style.display = "none", 220);
+}
+
 importModal.addEventListener("click", e => {
-  if (e.target === importModal) {
-    importModal.style.display = "none";
-  }
+  if (e.target === importModal) closeImportModal();
 });
 
 window.addEventListener("keydown", e => {
-  if (e.key === "Escape") {
-    importModal.style.display = "none";
-  }
+  if (e.key === "Escape") closeImportModal();
 });
 
 loadRepos().then(() => {
@@ -386,4 +403,3 @@ loadRepos().then(() => {
     }
   })();
 });
-
