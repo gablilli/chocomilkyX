@@ -124,9 +124,23 @@ header {
   flex-wrap: wrap;
 }
 
+/* copy button */
+.repo-actions .copyBtn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.10);
+  color: var(--text);
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.repo-actions .copyBtn:active {
+  background: rgba(255,255,255,0.12);
+  transform: scale(.96);
+  box-shadow: none;
+}
+
 /* buttons */
 button,
-.download,
 #importBtn,
 #importModal button {
   appearance: none;
@@ -142,9 +156,30 @@ button,
 }
 
 button:active,
-.download:active,
 #importBtn:active,
 #importModal button:active {
+  transform: scale(.96);
+  box-shadow: 0 6px 12px rgba(10,132,255,.28);
+  filter: brightness(1.05);
+}
+
+/* download button inside card */
+.card .download {
+  margin-top: auto;
+  font-size: 14px;
+  padding: 8px 0;
+  text-align: center;
+  text-decoration: underline;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  transition: transform .18s var(--ease), box-shadow .18s var(--ease), filter .18s var(--ease);
+}
+
+.card .download:active {
   transform: scale(.96);
   box-shadow: 0 6px 12px rgba(10,132,255,.28);
   filter: brightness(1.05);
@@ -224,7 +259,7 @@ button:active,
 .meta {
   display: flex;
   gap: 6px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   margin-bottom: 6px;
 }
 
@@ -236,14 +271,6 @@ button:active,
   border: 1px solid rgba(255,255,255,.08);
   background: rgba(255,255,255,.04);
   font-size: 11px;
-}
-
-/* download button inside card */
-.card .download {
-  margin-top: auto;
-  font-size: 12px;
-  padding: 6px;
-  text-align: center;
 }
 
 /* back button */
@@ -308,13 +335,24 @@ footer {
 /* mobile fix */
 @media (max-width: 640px) {
   #container { padding: 12px; }
+  
+  .repo-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-  .repo-card,
-  .card { width: 100%; max-width: 100%; overflow: hidden; }
+  .repo-actions {
+    width: 100%;
+    margin-top: 8px;
+    justify-content: flex-start;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
 
-  .repo-info { min-width: 0; width: 100%; }
-
-  .repo-actions button { flex: 1 1 auto; }
+  .repo-actions button {
+    width: 48%;
+    margin-top: 4px;
+  }
 
   #apps { grid-template-columns: repeat(2, 1fr); padding: 0; }
 }
