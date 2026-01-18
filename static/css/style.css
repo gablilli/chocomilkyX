@@ -32,6 +32,12 @@ header {
   text-align: center;
 }
 
+h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
 /* container */
 #container {
   max-width: 980px;
