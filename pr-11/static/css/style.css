@@ -94,12 +94,32 @@ h1 {
   background: rgba(0,0,0,0.3);
   backdrop-filter: blur(4px);
   margin-right: 6px;
+  position: relative;
 }
+
 .badge.version {
   background: rgba(60, 60, 60, 0.3);
+  position: absolute;
+  top: 4px;
+  left: 4px;
 }
+
 .badge.size {
-  background: rgba(60, 60, 60, 0.3);
+  background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.12));
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+}
+
+/* Riflesso stile iOS */
+.badge.version::after,
+.badge.size::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 50%;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.25), rgba(255,255,255,0));
+  border-radius: inherit;
 }
 
 .repo-actions {
@@ -123,8 +143,10 @@ h1 {
 }
 
 .repo-actions button.copyBtn {
-  background: #555;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.18);
   color: #fff;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.22);
 }
 
 .repo-actions button.removeBtn {
@@ -133,7 +155,7 @@ h1 {
   border: 1px solid #ff4c4c;
 }
 
-/* Search bar */
+/* search bar */
 #searchBar {
   display: none;
   justify-content: space-between;
@@ -163,7 +185,6 @@ h1 {
   color: #fff;
   font-weight: 700;
   cursor: pointer;
-  flex-shrink: 0;
 }
 
 /* apps */
@@ -188,12 +209,13 @@ h1 {
   flex-direction: column;
   align-items: center;
   opacity: 0;
-  transform: translateY(10px);
-  animation: fadeIn 0.4s forwards;
+  transform: translateY(6px);
+  animation: fadeInUp 0.32s var(--ease) forwards;
 }
 
-@keyframes fadeIn {
-  to { opacity: 1; transform: translateY(0); }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(6px);}
+  to { opacity: 1; transform: translateY(0);}
 }
 
 .icon img {
@@ -217,22 +239,13 @@ h1 {
 
 .meta {
   display: flex;
-  gap: 6px;
   font-size: 12px;
   color: var(--subtle);
   margin-bottom: 8px;
   justify-content: center;
   flex-wrap: wrap;
+  position: relative;
 }
-
-.meta span {
-  background: rgba(255,255,255,0.1);
-  padding: 2px 8px;
-  border-radius: 12px;
-}
-
-.version { font-weight: 500; }
-.size { font-weight: 500; }
 
 .download {
   display: inline-block;
