@@ -1,3 +1,16 @@
+/* fix overflow */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/*  root  */
 :root {
   --bg: #0d0d0f;
   --card: rgba(28,28,32,0.85);
@@ -6,9 +19,11 @@
   --subtle: #9ca3af;
   --radius: 18px;
   --shadow: 0 8px 24px rgba(0,0,0,0.4);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
+/*  base  */
 body {
   margin: 0;
   background: var(--bg);
@@ -30,18 +45,20 @@ h1 {
 }
 
 #container {
+  width: 100%;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 12px 20px 40px;
+  padding: 12px 16px 40px;
 }
 
-/* repo cards */
+/*  repos  */
 #repos {
   display: flex;
   flex-direction: column;
   gap: 12px;
   margin: 18px auto;
   max-width: 800px;
+  width: 100%;
 }
 
 .repo-card {
@@ -53,6 +70,7 @@ h1 {
   border-radius: 14px;
   box-shadow: var(--shadow);
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .repo-card img {
@@ -96,7 +114,7 @@ h1 {
   background: #444;
 }
 
-/* Search bar */
+/*  search  */
 #searchBar {
   display: none;
   justify-content: center;
@@ -104,10 +122,12 @@ h1 {
   margin: 14px auto;
   max-width: 600px;
   gap: 8px;
+  width: 100%;
 }
 
 #searchBar input {
   flex: 1;
+  min-width: 0;
   padding: 12px;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,0.06);
@@ -126,7 +146,7 @@ h1 {
   cursor: pointer;
 }
 
-/* apps */
+/*  apps  */
 #apps {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -134,6 +154,7 @@ h1 {
   padding: 18px;
   flex: 1;
   max-width: 1100px;
+  width: 100%;
   margin: 18px auto;
 }
 
@@ -180,7 +201,6 @@ h1 {
 .meta .version,
 .meta .size {
   font-weight: 500;
-  margin-bottom: 0;
 }
 
 .card .repo-meta {
@@ -188,12 +208,6 @@ h1 {
   color: var(--subtle);
   font-weight: 500;
   margin-top: 2px;
-}
-
-.version {
-  font-size: 12px;
-  color: #aaa;
-  margin-bottom: 12px;
 }
 
 .download {
@@ -206,6 +220,7 @@ h1 {
   font-weight: 700;
 }
 
+/*  other things  */
 #backBtn {
   display: none;
   margin: 8px auto;
@@ -244,47 +259,6 @@ h1 {
   animation: pulse 1.2s infinite;
 }
 
-/* import */
-#importModal {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(10px);
-  background: rgba(0,0,0,0.55);
-  z-index: 10000;
-}
-
-#importModal .box {
-  background: var(--card);
-  padding: 22px;
-  border-radius: 18px;
-  width: min(90%, 420px);
-  box-shadow: var(--shadow);
-  display: flex;
-  gap: 12px;
-}
-
-#importModal input {
-  flex: 1;
-  padding: 12px 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.04);
-  color: var(--text);
-}
-
-#importModal button {
-  padding: 12px 16px;
-  border-radius: 14px;
-  border: 0;
-  background: var(--accent);
-  color: #fff;
-  font-weight: 700;
-  cursor: pointer;
-}
-
 @keyframes pulse {
   0% { opacity: 0.5; }
   50% { opacity: 1; }
@@ -298,33 +272,50 @@ footer {
   margin-top: auto;
 }
 
-/* mobile */
+/*  mobile fixes  */
 @media (max-width: 640px) {
-  /* cards */
+
+  /* repos */
+  #repos {
+    margin: 12px 0;
+  }
+
   .repo-card {
     flex-direction: column;
     align-items: flex-start;
   }
+
+  .repo-info {
+    min-width: 0;
+    width: 100%;
+  }
+
   .repo-actions {
     width: 100%;
-    justify-content: flex-start;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 6px;
+  }
+
+  .repo-actions button {
+    width: 100%;
   }
 
   /* search */
   #searchBar {
-    flex-direction: column;
+    padding: 0 4px;
   }
-  #searchBar button#importBtn {
+
+  #searchBar input,
+  #searchBar button {
     width: 100%;
   }
 
-  /* apps grid */
+  /* apps */
   #apps {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
+    padding: 12px 8px;
     gap: 12px;
-    padding: 12px;
+    margin: 0;
   }
 
   .card {
@@ -343,15 +334,11 @@ footer {
 
   .subtitle {
     font-size: 11px;
-    margin-bottom: 6px;
   }
 
   .meta {
     font-size: 11px;
     gap: 6px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 4px;
   }
 
   .download {
