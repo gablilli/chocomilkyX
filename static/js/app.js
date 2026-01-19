@@ -53,7 +53,10 @@ const loadAllRepos = async (repos) => {
 
 /* ================= load global repos ================= */
 
+let reposLoaded = false;
+
 async function loadRepos() {
+  reposLoaded = false;
   reposArea.style.display = "none";
   reposArea.innerHTML = `<div class="loading-line">Loading libraries…</div>`;
 
@@ -63,6 +66,7 @@ async function loadRepos() {
 
     if (!globals.repos?.length) {
       reposArea.innerHTML = `<div class="loading-line">No libraries loaded.</div>`;
+      reposLoaded = true;
       reposArea.style.display = "block";
       return;
     }
@@ -109,9 +113,12 @@ async function loadRepos() {
     });
 
     searchBar.style.display = "flex";
+    reposLoaded = true;
     reposArea.style.display = "block";
+
   } catch {
     reposArea.innerHTML = `<div class="loading-line">Failed to load libraries.</div>`;
+    reposLoaded = true;
     reposArea.style.display = "block";
   }
 }
@@ -323,19 +330,21 @@ reposArea.addEventListener("click",e=>{
   }
 });
 
-backBtn.addEventListener("click",()=>{
-  viewingRepoUrl=null;
-  appsArea.innerHTML="";
-  reposArea.style.display="";
-  backBtn.style.display="none";
-  window.onscroll=null;
-  filteredApps=[];
-  loaded=0;
+backBtn.addEventListener("click", () => {
+  viewingRepoUrl = null;
+  appsArea.innerHTML = "";
+  backBtn.style.display = "none";
+  window.onscroll = null;
+  filteredApps = [];
+  loaded = 0;
 
-  [...reposArea.children].forEach((el,i)=>{
-    el.classList.remove("show");
-    requestAnimationFrame(()=>setTimeout(()=>el.classList.add("show"),i*60));
-  });
+  if (reposLoaded) {
+    reposArea.style.display = "";
+    [...reposArea.children].forEach((el, i) => {
+      el.classList.remove("show");
+      requestAnimationFrame(() => setTimeout(() => el.classList.add("show"), i * 60));
+    });
+  }
 });
 
 /* ================= index apps ================= */
