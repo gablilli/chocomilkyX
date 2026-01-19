@@ -419,6 +419,12 @@ importModalBtn.addEventListener("click", async () => {
   showToast("Repo imported!");
 });
 
+importModal.addEventListener("click", e => {
+  if (e.target === importModal) {
+    closeImportModal();
+  }
+});
+
 window.addEventListener("keydown", e => {
   if (e.key === "Escape") closeImportModal();
 });
