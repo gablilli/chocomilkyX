@@ -21,8 +21,8 @@ html, body {
   width: 100%;
   overflow-x: hidden;
   background:
-    radial-gradient(1200px 500px at top left, rgba(10,132,255,.18), transparent 60%),
-    radial-gradient(800px 400px at top right, rgba(255,255,255,.06), transparent 65%),
+    radial-gradient(1600px 700px at -30% -20%, rgba(10,132,255,.10), transparent 70%),
+    radial-gradient(1400px 600px at 130% -10%, rgba(255,255,255,.05), transparent 75%),
     var(--bg);
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
@@ -39,12 +39,12 @@ header {
   text-align: center;
   backdrop-filter: blur(18px) saturate(160%);
   -webkit-backdrop-filter: blur(18px) saturate(160%);
-  background: linear-gradient(
-    to bottom,
-    rgba(0,0,0,.65),
-    rgba(0,0,0,.25),
-    transparent
-  );
+  background: rgba(0,0,0,.55);
+  transition: transform .35s var(--ease);
+}
+
+header.unpin {
+  transform: translateY(-100%);
 }
 
 h1 {
@@ -68,6 +68,7 @@ h1 {
   display: none;
   gap: 10px;
   margin-bottom: 10px;
+  animation: fadeUp .35s var(--ease) both;
 }
 
 #searchInput {
@@ -106,6 +107,14 @@ h1 {
   box-shadow: var(--shadow);
   backdrop-filter: blur(20px) saturate(180%);
   align-items: center;
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.repo-card.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity .3s ease, transform .3s ease;
 }
 
 .repo-card img {
@@ -161,7 +170,8 @@ h1 {
 /* buttons */
 button,
 #importBtn,
-#importModal button {
+#importModal button,
+.card .download {
   appearance: none;
   border: none;
   border-radius: 999px;
@@ -169,12 +179,23 @@ button,
   background: var(--accent);
   color: #fff;
   cursor: pointer;
+  box-shadow: 0 10px 24px rgba(10,132,255,.22);
+  transition:
+    transform .22s var(--ease),
+    box-shadow .22s var(--ease),
+    filter .22s;
+}
+
+button:active,
+.card .download:active {
+  transform: scale(.94);
+  box-shadow: 0 6px 14px rgba(10,132,255,.32);
 }
 
 /* apps grid */
 #apps {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 14px;
   margin-top: 10px;
   width: 100%;
@@ -189,6 +210,14 @@ button,
   padding: 12px;
   box-shadow: var(--shadow);
   backdrop-filter: blur(20px) saturate(180%);
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.card.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity .35s ease, transform .35s ease;
 }
 
 .card .icon {
@@ -229,7 +258,7 @@ button,
 /* version / size */
 .meta {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   justify-content: center;
   margin-bottom: 8px;
 }
@@ -242,6 +271,7 @@ button,
   border-radius: 999px;
   background: rgba(255,255,255,.04);
   border: 1px solid rgba(255,255,255,.08);
+  flex-shrink: 0;
 }
 
 /* download */
@@ -251,20 +281,19 @@ button,
   padding: 8px;
   text-align: center;
   border-radius: var(--radius);
-  background: var(--accent);
-  color: #fff;
-  font-weight: 700;
+  text-decoration: none;
 }
 
 /* back button */
 #backBtn {
   display: none;
+  width: auto;
+  padding: 8px 14px;
+  font-size: 13px;
+  border-radius: 999px;
   background: rgba(255,255,255,0.08);
-  color: var(--text);
-  padding: 10px 16px;
-  border-radius: var(--radius);
-  font-weight: 700;
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 6px 14px rgba(255,255,255,.08);
 }
 
 /* footer */
@@ -273,6 +302,12 @@ footer {
   margin-top: 40px;
   font-size: 18px;
   color: var(--subtle);
+}
+
+/* animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* mobile */
