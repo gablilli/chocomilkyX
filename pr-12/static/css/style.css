@@ -171,7 +171,7 @@ h1 {
 /* copy button */
 .repo-actions .copyBtn {
   background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,.12);
   color: var(--text);
 }
 
@@ -207,7 +207,6 @@ button:active,
   box-shadow: 0 6px 14px rgba(10,132,255,.32);
 }
 
-/* FIX tasto + */
 #importBtn {
   min-height: 44px;
   padding: 10px 18px;
@@ -259,7 +258,6 @@ button:active,
   height: 100%;
   object-fit: cover;
   display: block;
-}
 }
 
 /* spacing fix */
@@ -340,6 +338,42 @@ footer {
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* import modal animation */
+#importModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s var(--ease);
+}
+
+#importModal.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+#importModal .box {
+  background: var(--card);
+  padding: 20px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: flex;
+  gap: 10px;
+  width: min(90%, 360px);
+  transform: scale(0.95);
+  transition: transform 0.25s var(--ease);
+}
+
+#importModal.show .box {
+  transform: scale(1);
 }
 
 /* mobile */
