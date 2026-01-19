@@ -175,7 +175,6 @@ async function openRepo(url,useProxy){
   window.scrollTo({ top: 0 });
 
   reposArea.style.display="none";
-  backBtn.style.display="inline-flex";
   appsArea.innerHTML="";
 
   for(let i=0;i<8;i++){
@@ -191,6 +190,8 @@ async function openRepo(url,useProxy){
 
     currentApps=repo.apps||[];
     applySearch();
+    
+    backBtn.style.display="inline-flex";
 
     window.onscroll=()=>{
       if(window.innerHeight+window.scrollY>=document.body.offsetHeight-120){
@@ -345,27 +346,9 @@ function indexRepoApps(repo){
 /* import stuff */
 const importModal = document.createElement("div");
 importModal.id = "importModal";
-importModal.style.cssText = `
-position: fixed;
-inset: 0;
-background: rgba(0,0,0,0.55);
-backdrop-filter: blur(10px);
-display: none;
-align-items: center;
-justify-content: center;
-z-index: 10000;
-`;
 
 importModal.innerHTML = `
-  <div class="box" style="
-    background: var(--card);
-    padding: 20px;
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    display: flex;
-    gap: 10px;
-    width: min(90%, 360px);
-  ">
+  <div class="box">
     <input id="importModalInput" type="url"
       placeholder="Paste repo JSON URL…"
       style="
@@ -396,6 +379,21 @@ document.body.appendChild(importModal);
 const importModalInput = document.getElementById("importModalInput");
 const importModalBtn = document.getElementById("importModalBtn");
 
+/* ================= helper modal ================= */
+function openImportModal() {
+  importModal.style.display = "flex";
+  requestAnimationFrame(() => importModal.classList.add("show"));
+  importModalInput.focus();
+}
+
+function closeImportModal() {
+  importModal.classList.remove("show");
+  setTimeout(() => importModal.style.display = "none", 250);
+}
+
+/* ================= events modal ================= */
+importBtn.addEventListener("click", openImportModal);
+
 importModalBtn.addEventListener("click", async () => {
   const url = importModalInput.value.trim();
   if (!url) return;
@@ -414,24 +412,13 @@ importModalBtn.addEventListener("click", async () => {
   saveUserRepo({ url, useProxy });
 
   importModalInput.value = "";
-  importModal.style.display = "none";
+  closeImportModal();
   showToast("Repo imported!");
 });
 
-/* ================= import modal ================= */
-
-importBtn.addEventListener("click",()=>{
-  importModal.classList.add("show");
-  importModal.style.display="flex";
-  importModalInput.focus();
-});
-
 window.addEventListener("keydown", e => {
-  if (e.key === "Escape") {
-    importModal.style.display = "none";
-  }
+  if (e.key === "Escape") closeImportModal();
 });
-
 /* ================= boot ================= */
 
 loadRepos().then(async()=>{
