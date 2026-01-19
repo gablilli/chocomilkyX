@@ -246,25 +246,22 @@ button:active,
 .card .icon {
   width: 100%;
   aspect-ratio: 1 / 1;
-  overflow: hidden;
   border-radius: var(--radius);
   margin-bottom: 10px;
-  background: none;
-  display: grid;
-  place-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
 .card .icon img {
-  width: auto !important;
-  height: auto !important;
   max-width: 64px;
   max-height: 64px;
-  contain: strict;
+  width: auto;
+  height: auto;
   object-fit: contain;
   display: block;
-  image-rendering: auto;
 }
-
 
 /* spacing fix */
 .card .title {
