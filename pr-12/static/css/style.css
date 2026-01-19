@@ -57,6 +57,9 @@ header {
   transition: transform .45s var(--ease);
 }
 
+#backBtn {
+  display: none;
+}
 
 .loading-line {
   text-align: center;
@@ -320,7 +323,6 @@ button:active,
 
 /* back button */
 #backBtn {
-  display: inline-flex;
   align-items: center;
   justify-content: center;
   width: auto;
