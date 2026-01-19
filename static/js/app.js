@@ -259,22 +259,24 @@ function renderApps(apps, append=false) {
     return;
   }
 
-  if (!append) appsArea.innerHTML="";
+ if (!append) appsArea.innerHTML = "";
 
-  apps.forEach((app,i)=>{
-    const latest=app.versions?.[0]||{};
-    const version=latest.version||"";
-    const sizeBytes=latest.size||0;
-    let sizeText="Unknown";
-    if(sizeBytes>1024*1024) sizeText=(sizeBytes/1024/1024).toFixed(2)+" MB";
-    else if(sizeBytes>1024) sizeText=(sizeBytes/1024).toFixed(2)+" KB";
-
-    const card=document.createElement("div");
-    card.className="card";
-
-    card.innerHTML=`
-      <div class="icon"><img loading="lazy" src="${app.iconURL||""}"></div>
-      <div class="title">${app.name||""}</div>
+  apps.forEach(app => {
+    const latest = (app.versions && app.versions.length) ? app.versions[0] : {};
+    const version = latest.version || app.version || "";
+    const desc = app.subtitle || app.localizedDescription || latest.localizedDescription || "";
+    const downloadURL = app.downloadURL || latest.downloadURL || "#";
+    const sizeBytes = latest.size || app.size || 0;
+    let sizeText = "Unknown";
+    if (sizeBytes > 1024*1024) sizeText = (sizeBytes/(1024*1024)).toFixed(2)+" MB";
+    else if (sizeBytes > 1024) sizeText = (sizeBytes/1024).toFixed(2)+" KB";
+    else if (sizeBytes > 0) sizeText = sizeBytes+" B";
+    const repoNameHtml = app.__repoName ? `<div class="repo-meta">From: ${app.__repoName}</div>` : "";
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="icon"><img loading="lazy" src="${app.iconURL || ''}" alt=""></div>
+      <div class="title">${app.name || ""}</div>
       <div class="meta">
         ${version?`<span class="version">v${version}</span>`:""}
         <span class="size">${sizeText}</span>
@@ -333,6 +335,82 @@ function indexRepoApps(repo){
     allAppsIndex.push({...app,__repoName:repo.name||"Repo"});
   });
 }
+
+/* import stuff */
+const importModal = document.createElement("div");
+importModal.id = "importModal";
+importModal.style.cssText = `
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.55);
+backdrop-filter: blur(10px);
+display: none;
+align-items: center;
+justify-content: center;
+z-index: 10000;
+`;
+
+importModal.innerHTML = `
+  <div class="box" style="
+    background: var(--card);
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    display: flex;
+    gap: 10px;
+    width: min(90%, 360px);
+  ">
+    <input id="importModalInput" type="url"
+      placeholder="Paste repo JSON URL…"
+      style="
+        flex:1;
+        padding:12px;
+        border-radius:12px;
+        border:1px solid rgba(255,255,255,0.06);
+        background:rgba(255,255,255,0.03);
+        color:var(--text)
+      ">
+    <button id="importModalBtn"
+      style="
+        padding:12px 16px;
+        border-radius:12px;
+        border:0;
+        background:var(--accent);
+        color:#fff;
+        font-weight:700;
+        cursor:pointer
+      ">
+      Import
+    </button>
+  </div>
+`;
+
+document.body.appendChild(importModal);
+
+const importModalInput = document.getElementById("importModalInput");
+const importModalBtn = document.getElementById("importModalBtn");
+
+importModalBtn.addEventListener("click", async () => {
+  const url = importModalInput.value.trim();
+  if (!url) return;
+  showToast("Importing repo…");
+  let repo = await fetchUserRepo(url);
+  let useProxy = false;
+  if (!repo) {
+    repo = await fetchUserRepo(url, true);
+    useProxy = true;
+  }
+  if (!repo) {
+    showToast("Invalid repo", 2000);
+    return;
+  }
+  renderRepoCard(repo, url, useProxy, true);
+  saveUserRepo({ url, useProxy });
+
+  importModalInput.value = "";
+  importModal.style.display = "none";
+  showToast("Repo imported!");
+});
 
 /* ================= import modal ================= */
 
