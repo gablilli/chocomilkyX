@@ -5,6 +5,7 @@ const ASSETS = [
   '/chocomilkyX/index.html',
   '/chocomilkyX/static/style.css',
   '/chocomilkyX/static/app.js',
+  '/chocomilkyX/static/manifest.json',
   '/chocomilkyX/back/global-repos.json',
   '/chocomilkyX/icons/icon-192.png',
   '/chocomilkyX/icons/icon-512.png'
