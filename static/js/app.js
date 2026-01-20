@@ -319,7 +319,7 @@ function renderApps(apps, append=false) {
 // icon fallback
 document.addEventListener('error', function(e){
   if(e.target.tagName.toLowerCase() === 'img'){
-    e.target.src = 'https://raw.githubusercontent.com/gablilli/chocomilkyX/refs/heads/mobile/static/icons/icon_fallback.png';
+    e.target.src = 'https://raw.githubusercontent.com/gablilli/chocomilkyX/refs/heads/main/static/icons/icon_fallback.png';
   }
 }, true);
 
