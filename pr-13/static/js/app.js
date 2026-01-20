@@ -362,8 +362,28 @@ importModal.id = "importModal";
 
 importModal.innerHTML = `
   <div class="box">
-    <input id="importModalInput" type="url" placeholder="Paste repo JSON URL…">
-    <button id="importModalBtn">Import</button>
+    <input id="importModalInput" type="url"
+        placeholder="Paste repo JSON URL…"
+        style="
+          flex:1;
+          padding:12px;
+          border-radius:12px;
+          border:1px solid rgba(255,255,255,0.06);
+          background:rgba(255,255,255,0.03);
+          color:var(--text)
+        ">
+      <button id="importModalBtn"
+        style="
+          padding:12px 16px;
+          border-radius:12px;
+          border:0;
+          background:var(--accent);
+          color:#fff;
+          font-weight:700;
+          cursor:pointer
+        ">
+        Import
+      </button>
   </div>
 `;
 document.body.appendChild(importModal);
