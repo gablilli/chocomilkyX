@@ -1,0 +1,23 @@
+{
+  "name": "chocomilkyX",
+  "short_name": "chocomilkyX",
+  "description": "iPA repositories browser",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#0d0d0f",
+  "theme_color": "#0a84ff",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/chocomilkyX/static/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/chocomilkyX/static/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
