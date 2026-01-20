@@ -15,7 +15,7 @@ let filteredApps = [];
 let loaded = 0;
 let lastScrollY = 0;
 
-const proxy = "https://proxy-sooty-ten-88.vercel.app/api/proxy?url=";
+const proxy = "https://chocomilky-proxy.vercel.app/api/proxy?url=";
 
 /* ================= toast ================= */
 
