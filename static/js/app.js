@@ -10,6 +10,7 @@ const header = document.querySelector("header");
 let currentApps = [];
 let viewingRepoUrl = null;
 let allAppsIndex = [];
+allAppsIndex._keys = new Set();
 let filteredApps = [];
 let loaded = 0;
 let lastScrollY = 0;
@@ -51,6 +52,22 @@ const loadAllRepos = async (repos) => {
   return results.filter(r => r);
 };
 
+/* ================= index apps ================= */
+
+function indexRepoApps(repo) {
+  repo.apps?.forEach(app => {
+    const key = `${app.name}|${repo.name}`;
+    if (allAppsIndex._keys.has(key)) return;
+
+    allAppsIndex.push({
+      ...app,
+      __repoName: repo.name || "Repo"
+    });
+
+    allAppsIndex._keys.add(key);
+  });
+}
+
 /* ================= load global repos ================= */
 
 let reposLoaded = false;
@@ -67,13 +84,14 @@ async function loadRepos() {
     if (!globals.repos?.length) {
       reposArea.innerHTML = `<div class="loading-line">No libraries loaded.</div>`;
       reposLoaded = true;
-      reposArea.style.display = "block";
       return;
     }
 
     const reposData = await loadAllRepos(globals.repos);
 
     allAppsIndex = [];
+    allAppsIndex._keys = new Set();
+
     reposData.forEach(indexRepoApps);
 
     currentApps = allAppsIndex.slice();
@@ -106,20 +124,15 @@ async function loadRepos() {
       `;
 
       reposArea.appendChild(div);
-
-      requestAnimationFrame(() => {
-        setTimeout(() => div.classList.add("show"), i * 60);
-      });
+      requestAnimationFrame(() => setTimeout(() => div.classList.add("show"), i * 60));
     });
 
     searchBar.style.display = "flex";
     reposLoaded = true;
-    reposArea.style.display = "block";
 
   } catch {
     reposArea.innerHTML = `<div class="loading-line">Failed to load libraries.</div>`;
     reposLoaded = true;
-    reposArea.style.display = "block";
   }
 }
 
@@ -200,7 +213,6 @@ async function openRepo(url,useProxy){
 
     currentApps=repo.apps||[];
     applySearch();
-    
     backBtn.style.display="inline-flex";
 
     window.onscroll=()=>{
@@ -273,7 +285,7 @@ function renderApps(apps, append=false) {
   if (!append) appsArea.innerHTML = "";
 
   apps.forEach((app, i) => {
-    const latest = (app.versions && app.versions.length) ? app.versions[0] : {};
+    const latest = app.versions?.[0] || {};
     const version = latest.version || app.version || "";
     const desc = app.subtitle || app.localizedDescription || latest.localizedDescription || "";
     const downloadURL = app.downloadURL || latest.downloadURL || "#";
@@ -288,10 +300,8 @@ function renderApps(apps, append=false) {
     card.className = "card";
 
     card.innerHTML = `
-      <div class="icon">
-        <img loading="lazy" src="${app.iconURL || ''}" alt="">
-      </div>
-      <div class="title">${app.name || ""}</div>
+      <div class="icon"><img loading="lazy" src="${app.iconURL||''}"></div>
+      <div class="title">${app.name||""}</div>
       <div class="meta">
         ${version ? `<span class="version">v${version}</span>` : ""}
         <span class="size">${sizeText}</span>
@@ -302,9 +312,7 @@ function renderApps(apps, append=false) {
     `;
 
     appsArea.appendChild(card);
-    requestAnimationFrame(() => {
-      setTimeout(() => card.classList.add("show"), i * 70);
-    });
+    requestAnimationFrame(() => setTimeout(() => card.classList.add("show"), i * 70));
   });
 }
 
@@ -347,81 +355,74 @@ backBtn.addEventListener("click", () => {
   }
 });
 
-/* ================= index apps ================= */
+/* ================= import modal ================= */
 
-function indexRepoApps(repo){
-  repo.apps?.forEach(app=>{
-    allAppsIndex.push({...app,__repoName:repo.name||"Repo"});
-  });
-}
-
-/* import stuff */
 const importModal = document.createElement("div");
 importModal.id = "importModal";
 
 importModal.innerHTML = `
   <div class="box">
     <input id="importModalInput" type="url"
-      placeholder="Paste repo JSON URL…"
-      style="
-        flex:1;
-        padding:12px;
-        border-radius:12px;
-        border:1px solid rgba(255,255,255,0.06);
-        background:rgba(255,255,255,0.03);
-        color:var(--text)
-      ">
-    <button id="importModalBtn"
-      style="
-        padding:12px 16px;
-        border-radius:12px;
-        border:0;
-        background:var(--accent);
-        color:#fff;
-        font-weight:700;
-        cursor:pointer
-      ">
-      Import
-    </button>
+        placeholder="Paste repo JSON URL…"
+        style="
+          flex:1;
+          padding:12px;
+          border-radius:12px;
+          border:1px solid rgba(255,255,255,0.06);
+          background:rgba(255,255,255,0.03);
+          color:var(--text)
+        ">
+      <button id="importModalBtn"
+        style="
+          padding:12px 16px;
+          border-radius:12px;
+          border:0;
+          background:var(--accent);
+          color:#fff;
+          font-weight:700;
+          cursor:pointer
+        ">
+        Import
+      </button>
   </div>
 `;
-
 document.body.appendChild(importModal);
 
 const importModalInput = document.getElementById("importModalInput");
 const importModalBtn = document.getElementById("importModalBtn");
 
-/* ================= helper modal ================= */
 function openImportModal() {
   importModal.style.display = "flex";
   requestAnimationFrame(() => importModal.classList.add("show"));
   importModalInput.focus();
 }
-
 function closeImportModal() {
   importModal.classList.remove("show");
   setTimeout(() => importModal.style.display = "none", 250);
 }
 
-/* ================= events modal ================= */
 importBtn.addEventListener("click", openImportModal);
 
 importModalBtn.addEventListener("click", async () => {
   const url = importModalInput.value.trim();
   if (!url) return;
+
   showToast("Importing repo…");
   let repo = await fetchUserRepo(url);
   let useProxy = false;
+
   if (!repo) {
     repo = await fetchUserRepo(url, true);
     useProxy = true;
   }
-  if (!repo) {
-    showToast("Invalid repo", 2000);
-    return;
-  }
+  if (!repo) return showToast("Invalid repo", 2000);
+
   renderRepoCard(repo, url, useProxy, true);
   saveUserRepo({ url, useProxy });
+  indexRepoApps(repo);
+
+  currentApps = allAppsIndex.slice();
+  filteredApps = currentApps.slice();
 
   importModalInput.value = "";
   closeImportModal();
@@ -429,14 +430,13 @@ importModalBtn.addEventListener("click", async () => {
 });
 
 importModal.addEventListener("click", e => {
-  if (e.target === importModal) {
-    closeImportModal();
-  }
+  if (e.target === importModal) closeImportModal();
 });
 
 window.addEventListener("keydown", e => {
   if (e.key === "Escape") closeImportModal();
 });
+
 /* ================= boot ================= */
 
 loadRepos().then(async()=>{
