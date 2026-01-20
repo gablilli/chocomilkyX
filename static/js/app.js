@@ -273,6 +273,13 @@ function applySearch() {
   loaded = 0;
   appsArea.innerHTML = "";
   renderNextBatch();
+
+  if (!viewingRepoUrl) {
+  window.onscroll = () => {
+    if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 120){
+      if(loaded < filteredApps.length) renderNextBatch();
+    }
+  };
 }
 
 let searchTimeout;
