@@ -335,32 +335,11 @@ button:active,
 }
 
 /* footer */
-.footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
+footer {
+  text-align: center;
   margin-top: 40px;
-  padding-bottom: 30px;
-  font-size: 14px;
+  font-size: 18px;
   color: var(--subtle);
-}
-
-.github-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--text);
-  text-decoration: none;
-  font-weight: 600;
-  opacity: 0.85;
-  transition: opacity .2s var(--ease), transform .2s var(--ease);
-}
-
-.github-link svg {
-  width: 18px;
-  height: 18px;
-  fill: currentColor;
 }
 
 /* animations */
