@@ -1,4 +1,4 @@
-const CACHE = "chocomilkyx-v1";
+const CACHE = "chocomilkyx-v1.1.2";
 
 const ASSETS = [
   './',
