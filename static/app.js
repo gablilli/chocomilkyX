@@ -20,7 +20,7 @@ const proxy = "https://chocomilky-proxy.vercel.app/api/proxy?url=";
 /* ================= pwa =================== */
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("sw.js");
+    navigator.serviceWorker.register("./sw.js");
   });
 }
 
