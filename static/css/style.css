@@ -57,6 +57,16 @@ header {
   transition: transform .45s var(--ease);
 }
 
+#sortSelect {
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.03);
+  color: var(--text);
+  font-size: 14px;
+  outline: none;
+}
+
 #backBtn {
   display: none;
 }
