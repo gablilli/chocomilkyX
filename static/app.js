@@ -6,6 +6,10 @@ const searchInput = document.getElementById('searchInput');
 const toast = document.getElementById('toast');
 const importBtn = document.getElementById("importBtn");
 const header = document.querySelector("header");
+const sortSelect = document.getElementById("sortSelect");
+let currentSort = "newest";
+
+sortSelect.style.display = "none";
 
 let currentApps = [];
 let viewingRepoUrl = null;
@@ -74,6 +78,54 @@ function indexRepoApps(repo) {
     allAppsIndex._keys.add(key);
   });
 }
+
+/* ================= utility sorting ================ */
+
+function getAppDate(app) {
+  if (app.fullDate) return Number(app.fullDate);
+  const d =
+    app.versionDate ||
+    app.versions?.[0]?.versionDate;
+  return d ? new Date(d).getTime() : 0;
+}
+
+function getAppSize(app) {
+  return app.versions?.[0]?.size || app.size || 0;
+}
+
+function getAppVersion(app) {
+  return app.versions?.[0]?.version || app.version || "";
+}
+
+function sortApps(apps) {
+  const arr = apps.slice();
+
+  switch (currentSort) {
+    case "oldest":
+      return arr.sort((a,b)=>getAppDate(a)-getAppDate(b));
+
+    case "size_desc":
+      return arr.sort((a,b)=>getAppSize(b)-getAppSize(a));
+
+    case "size_asc":
+      return arr.sort((a,b)=>getAppSize(a)-getAppSize(b));
+
+    case "version":
+      return arr.sort((a,b)=>
+        String(getAppVersion(b))
+          .localeCompare(getAppVersion(a), undefined, {numeric:true})
+      );
+
+    default: // newest
+      return arr.sort((a,b)=>getAppDate(b)-getAppDate(a));
+  }
+}
+
+/* sorting listener */
+sortSelect.addEventListener("change", () => {
+  currentSort = sortSelect.value;
+  applySearch();
+});
 
 /* ================= load global repos ================= */
 
@@ -203,6 +255,7 @@ async function openRepo(url,useProxy){
   viewingRepoUrl = url;
   searchInput.value = "";
   window.scrollTo({ top: 0 });
+  sortSelect.style.display = "";
 
   reposArea.style.display="none";
   appsArea.innerHTML="";
@@ -256,10 +309,11 @@ function applySearch() {
       filteredApps=[];
       loaded=0;
       window.onscroll=null;
+      sortSelect.style.display = "none";
       return;
     }
-
-    filteredApps = base.slice();
+    
+    filteredApps = sortApps(base);
     loaded = 0;
     appsArea.innerHTML = "";
     renderNextBatch();
@@ -267,8 +321,11 @@ function applySearch() {
   }
 
   if (!viewingRepoUrl) reposArea.style.display = "none";
-
-  filteredApps = base.filter(a => a.name?.toLowerCase().includes(q));
+  sortSelect.style.display = "";
+  
+  filteredApps = sortApps(
+    base.filter(a => a.name?.toLowerCase().includes(q))
+  );
   loaded = 0;
   appsArea.innerHTML = "";
   renderNextBatch();
@@ -366,6 +423,7 @@ backBtn.addEventListener("click", () => {
   window.onscroll = null;
   filteredApps = [];
   loaded = 0;
+  sortSelect.style.display = "none";
 
   if (reposLoaded) {
     reposArea.style.display = "";
