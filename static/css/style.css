@@ -65,7 +65,14 @@ header {
   color: var(--text);
   font-size: 14px;
   outline: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
 }
+
+#sortSelect.show {
+  opacity: 1;
+}
+
 
 #backBtn {
   display: none;
