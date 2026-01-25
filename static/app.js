@@ -138,17 +138,9 @@ function toggleVersionSort(show) {
   }
 
   if (show) {
-    sortSelect.style.display = "inline-block";
-    sortSelect.style.opacity = "0";
-    sortSelect.style.transform = "translateY(-6px)";
-
-    requestAnimationFrame(() => {
-      sortSelect.classList.add("show");
-    });
-
+    requestAnimationFrame(() => sortSelect.classList.add("show"));
   } else {
     sortSelect.classList.remove("show");
-    setTimeout(() => sortSelect.style.display = "none", 250);
   }
 }
 
