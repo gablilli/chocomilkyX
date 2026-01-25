@@ -136,6 +136,14 @@ function toggleVersionSort(show) {
     currentSort = "newest";
     sortSelect.value = "newest";
   }
+
+  if (show) {
+    sortSelect.style.display = "inline-block";
+    requestAnimationFrame(() => sortSelect.classList.add("show"));
+  } else {
+    sortSelect.classList.remove("show");
+    setTimeout(() => sortSelect.style.display = "none", 250);
+  }
 }
 
 /* ================= load global repos ================= */
