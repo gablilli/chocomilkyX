@@ -127,6 +127,17 @@ sortSelect.addEventListener("change", () => {
   applySearch();
 });
 
+/* helper for showing version when its time */
+function toggleVersionSort(show) {
+  const opt = sortSelect.querySelector('option[value="version"]');
+  if (opt) opt.style.display = show ? "" : "none";
+
+  if (!show && currentSort === "version") {
+    currentSort = "newest";
+    sortSelect.value = "newest";
+  }
+}
+
 /* ================= load global repos ================= */
 
 let reposLoaded = false;
@@ -256,6 +267,7 @@ async function openRepo(url,useProxy){
   searchInput.value = "";
   window.scrollTo({ top: 0 });
   sortSelect.style.display = "";
+  toggleVersionSort(false);
 
   reposArea.style.display="none";
   appsArea.innerHTML="";
@@ -296,6 +308,9 @@ function renderNextBatch() {
 
 function applySearch() {
   const q = searchInput.value.trim().toLowerCase();
+  const isGlobalSearch = !viewingRepoUrl;
+  const hasQuery = q.length > 0;
+  toggleVersionSort(isGlobalSearch || hasQuery);
   const base = viewingRepoUrl ? currentApps : allAppsIndex;
 
   if (!q) {
@@ -430,6 +445,7 @@ backBtn.addEventListener("click", () => {
     [...reposArea.children].forEach((el, i) => {
       el.classList.remove("show");
       requestAnimationFrame(() => setTimeout(() => el.classList.add("show"), i * 60));
+      toggleVersionSort(false);
     });
   }
 });
