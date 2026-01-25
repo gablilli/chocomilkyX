@@ -274,7 +274,6 @@ async function openRepo(url,useProxy){
   viewingRepoUrl = url;
   searchInput.value = "";
   window.scrollTo({ top: 0 });
-  sortSelect.style.display = "";
   toggleVersionSort(false);
 
   reposArea.style.display="none";
@@ -332,7 +331,7 @@ function applySearch() {
       filteredApps=[];
       loaded=0;
       window.onscroll=null;
-      sortSelect.style.display = "none";
+      toggleVersionSort(true);
       return;
     }
     
@@ -344,7 +343,7 @@ function applySearch() {
   }
 
   if (!viewingRepoUrl) reposArea.style.display = "none";
-  sortSelect.style.display = "";
+  toggleVersionSort(true);
   
   filteredApps = sortApps(
     base.filter(a => a.name?.toLowerCase().includes(q))
@@ -446,7 +445,7 @@ backBtn.addEventListener("click", () => {
   window.onscroll = null;
   filteredApps = [];
   loaded = 0;
-  sortSelect.style.display = "none";
+  toggleVersionSort(false);
 
   if (reposLoaded) {
     reposArea.style.display = "";
