@@ -65,14 +65,14 @@ header {
   color: var(--text);
   font-size: 14px;
   position: absolute;
-  right: 0;
+  right: 12px;
   top: 50%;
-  outline: none;
   transform: translateY(-50%);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
 }
+
 
 #sortSelect.show {
   opacity: 1;
@@ -124,6 +124,7 @@ h1 {
   border-radius: var(--radius);
   border: 1px solid rgba(255,255,255,0.1);
   background: rgba(255,255,255,0.03);
+  padding-right: 90px;
   color: var(--text);
   font-size: 16px;
   outline: none;
