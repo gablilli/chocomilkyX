@@ -118,7 +118,13 @@ h1 {
   position: relative;
 }
 
+.searchWrap {
+  position: relative;
+  flex: 1;
+}
+
 #searchInput {
+  width: 100%;
   flex: 1;
   padding: 10px 14px;
   border-radius: var(--radius);
