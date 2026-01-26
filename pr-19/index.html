@@ -13,18 +13,19 @@
 </head>
 <body>
 <header><h1>chocomilkyX iPA library</h1></header>
-<div id="container">
-  <div id="searchBar">
-    <select id="sortSelect" title="Sort apps">
-    <option value="newest">Newest</option>
-    <option value="oldest">Oldest</option>
-    <option value="size_desc">Size ↓</option>
-    <option value="size_asc">Size ↑</option>
-    <option value="version">Version</option>
-    </select>
+<div id="searchBar">
+  <div class="searchWrap">
     <input id="searchInput" type="text" placeholder="Search apps…">
-    <button id="importBtn" title="Import Personal Repo">+</button>
+    <select id="sortSelect" title="Sort apps">
+      <option value="newest">Newest</option>
+      <option value="oldest">Oldest</option>
+      <option value="size_desc">Size ↓</option>
+      <option value="size_asc">Size ↑</option>
+      <option value="version">Version</option>
+    </select>
   </div>
+  <button id="importBtn" title="Import Personal Repo">+</button>
+</div>
   <div id="repos"></div>
   <button id="backBtn">← Back to Libraries</button>
   <div id="apps"></div>
