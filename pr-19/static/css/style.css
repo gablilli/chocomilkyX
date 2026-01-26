@@ -58,21 +58,20 @@ header {
 }
 
 #sortSelect {
-  padding: 10px 12px;
-  border-radius: var(--radius);
-  border: 1px solid rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.03);
-  color: var(--text);
-  font-size: 14px;
   position: absolute;
-  right: 12px;
+  right: 6px;
   top: 50%;
   transform: translateY(-50%);
+  height: calc(100% - 12px);
+  border-radius: 12px;
+  padding: 0 10px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--text);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+  transition: opacity .25s var(--ease);
 }
-
 
 #sortSelect.show {
   opacity: 1;
@@ -130,7 +129,7 @@ h1 {
   border-radius: var(--radius);
   border: 1px solid rgba(255,255,255,0.1);
   background: rgba(255,255,255,0.03);
-  padding-right: 90px;
+  padding-right: 96px;
   color: var(--text);
   font-size: 16px;
   outline: none;
