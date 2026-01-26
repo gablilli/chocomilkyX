@@ -68,7 +68,7 @@ header {
   right: 0;
   top: 50%;
   outline: none;
-  transform: translateY(-50%) translateY(-6px);
+  transform: translateY(-50%);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
@@ -76,7 +76,7 @@ header {
 
 #sortSelect.show {
   opacity: 1;
-  transform: translateY(-50%) translateY(0);
+  transform: translateY(-50%);
   pointer-events: auto;
 }
 
@@ -115,6 +115,7 @@ h1 {
   gap: 10px;
   margin-bottom: 10px;
   animation: fadeUp .35s var(--ease) both;
+  position: relative;
 }
 
 #searchInput {
