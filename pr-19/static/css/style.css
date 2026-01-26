@@ -125,7 +125,7 @@ h1 {
 
 #searchInput {
   width: auto;
-  flex: none;
+  flex: 1;
   padding: 10px 14px;
   border-radius: var(--radius);
   border: 1px solid rgba(255,255,255,0.1);
