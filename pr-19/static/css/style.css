@@ -120,6 +120,7 @@ h1 {
 .searchWrap {
   position: relative;
   flex: 1;
+  max-width: 360px;
 }
 
 #searchInput {
