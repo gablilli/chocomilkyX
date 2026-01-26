@@ -109,7 +109,13 @@ h1 {
 }
 
 /* search bar */
+.searchWrap {
+  position: relative;
+  flex: 1;
+}
+
 #searchBar {
+  width: 100%;
   display: none;
   gap: 10px;
   margin-bottom: 10px;
@@ -117,13 +123,9 @@ h1 {
   position: relative;
 }
 
-.searchWrap {
-  position: relative;
-  flex: 1;
-}
-
 #searchInput {
-  flex: 1;
+  width: auto;
+  flex: none;
   padding: 10px 14px;
   border-radius: var(--radius);
   border: 1px solid rgba(255,255,255,0.1);
