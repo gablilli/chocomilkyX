@@ -57,6 +57,28 @@ header {
   transition: transform .45s var(--ease);
 }
 
+#sortSelect {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: calc(100% - 12px);
+  border-radius: 12px;
+  padding: 0 10px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--text);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s var(--ease);
+}
+
+#sortSelect.show {
+  opacity: 1;
+  transform: translateY(-50%);
+  pointer-events: auto;
+}
+
 #backBtn {
   display: none;
 }
@@ -87,19 +109,28 @@ h1 {
 }
 
 /* search bar */
+.searchWrap {
+  position: relative;
+  flex: 1;
+}
+
 #searchBar {
+  width: 100%;
   display: none;
   gap: 10px;
   margin-bottom: 10px;
   animation: fadeUp .35s var(--ease) both;
+  position: relative;
 }
 
 #searchInput {
+  width: 100%;
   flex: 1;
   padding: 10px 14px;
   border-radius: var(--radius);
   border: 1px solid rgba(255,255,255,0.1);
   background: rgba(255,255,255,0.03);
+  padding-right: 96px;
   color: var(--text);
   font-size: 16px;
   outline: none;
@@ -335,11 +366,32 @@ button:active,
 }
 
 /* footer */
-footer {
-  text-align: center;
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
   margin-top: 40px;
-  font-size: 18px;
+  padding-bottom: 30px;
+  font-size: 14px;
   color: var(--subtle);
+}
+
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  opacity: 0.85;
+  transition: opacity .2s var(--ease), transform .2s var(--ease);
+}
+
+.github-link svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
 }
 
 /* animations */

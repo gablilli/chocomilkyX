@@ -6,6 +6,8 @@ const searchInput = document.getElementById('searchInput');
 const toast = document.getElementById('toast');
 const importBtn = document.getElementById("importBtn");
 const header = document.querySelector("header");
+const sortSelect = document.getElementById("sortSelect");
+let currentSort = "newest";
 
 let currentApps = [];
 let viewingRepoUrl = null;
@@ -73,6 +75,71 @@ function indexRepoApps(repo) {
 
     allAppsIndex._keys.add(key);
   });
+}
+
+/* ================= utility sorting ================ */
+
+function getAppDate(app) {
+  if (app.fullDate) return Number(app.fullDate);
+  const d =
+    app.versionDate ||
+    app.versions?.[0]?.versionDate;
+  return d ? new Date(d).getTime() : 0;
+}
+
+function getAppSize(app) {
+  return app.versions?.[0]?.size || app.size || 0;
+}
+
+function getAppVersion(app) {
+  return app.versions?.[0]?.version || app.version || "";
+}
+
+function sortApps(apps) {
+  const arr = apps.slice();
+
+  switch (currentSort) {
+    case "oldest":
+      return arr.sort((a,b)=>getAppDate(a)-getAppDate(b));
+
+    case "size_desc":
+      return arr.sort((a,b)=>getAppSize(b)-getAppSize(a));
+
+    case "size_asc":
+      return arr.sort((a,b)=>getAppSize(a)-getAppSize(b));
+
+    case "version":
+      return arr.sort((a,b)=>
+        String(getAppVersion(b))
+          .localeCompare(getAppVersion(a), undefined, {numeric:true})
+      );
+
+    default: // newest
+      return arr.sort((a,b)=>getAppDate(b)-getAppDate(a));
+  }
+}
+
+/* sorting listener */
+sortSelect.addEventListener("change", () => {
+  currentSort = sortSelect.value;
+  applySearch();
+});
+
+/* helper for showing version when its time */
+function toggleVersionSort({ show, inRepo = false, hasQuery = false }) {
+  const opt = sortSelect.querySelector('option[value="version"]');
+  if (opt) opt.style.display = (inRepo && !hasQuery) ? "none" : "";
+
+  if (!show && sortSelect.value === "version") {
+    currentSort = "newest";
+    sortSelect.value = "newest";
+  }
+
+  if (show) {
+    sortSelect.classList.add("show");
+  } else {
+    sortSelect.classList.remove("show");
+  }
 }
 
 /* ================= load global repos ================= */
@@ -203,6 +270,7 @@ async function openRepo(url,useProxy){
   viewingRepoUrl = url;
   searchInput.value = "";
   window.scrollTo({ top: 0 });
+  toggleVersionSort(false);
 
   reposArea.style.display="none";
   appsArea.innerHTML="";
@@ -243,6 +311,8 @@ function renderNextBatch() {
 
 function applySearch() {
   const q = searchInput.value.trim().toLowerCase();
+  const isGlobalSearch = !viewingRepoUrl;
+  const hasQuery = q.length > 0;
   const base = viewingRepoUrl ? currentApps : allAppsIndex;
 
   if (!q) {
@@ -256,22 +326,25 @@ function applySearch() {
       filteredApps=[];
       loaded=0;
       window.onscroll=null;
+      toggleVersionSort({ show: false });
       return;
     }
 
-    filteredApps = base.slice();
+    filteredApps = sortApps(base);
     loaded = 0;
     appsArea.innerHTML = "";
     renderNextBatch();
+    toggleVersionSort({ show: true, inRepo: true, hasQuery: false });
     return;
   }
 
   if (!viewingRepoUrl) reposArea.style.display = "none";
 
-  filteredApps = base.filter(a => a.name?.toLowerCase().includes(q));
+  filteredApps = sortApps(base.filter(a => a.name?.toLowerCase().includes(q)));
   loaded = 0;
   appsArea.innerHTML = "";
   renderNextBatch();
+  toggleVersionSort({ show: true, inRepo: viewingRepoUrl, hasQuery: true });
 
   if (!viewingRepoUrl) {
     window.onscroll = () => {
@@ -366,12 +439,14 @@ backBtn.addEventListener("click", () => {
   window.onscroll = null;
   filteredApps = [];
   loaded = 0;
+  toggleVersionSort(false);
 
   if (reposLoaded) {
     reposArea.style.display = "";
     [...reposArea.children].forEach((el, i) => {
       el.classList.remove("show");
       requestAnimationFrame(() => setTimeout(() => el.classList.add("show"), i * 60));
+      toggleVersionSort(false);
     });
   }
 });
