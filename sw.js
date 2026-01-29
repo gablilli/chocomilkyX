@@ -1,14 +1,13 @@
 const CACHE = "chocomilkyx-v1.1.2";
 
 const ASSETS = [
-  './',
-  './index.html',
-  './static/style.css',
-  './static/app.js',
-  './static/manifest.json',
-  './back/global-repos.json',
-  './static/icons/icon-192.png',
-  './static/icons/icon-512.png'
+  "/",
+  "/index.html",
+  "/static/css/style.css",
+  "/static/app.js",
+  "/static/manifest.json",
+  "/static/icons/icon-192.png",
+  "/static/icons/icon-512.png"
 ];
 
 self.addEventListener("install", e => {
