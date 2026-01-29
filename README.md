@@ -13,21 +13,25 @@
 
 <p align="center">
   The chocomilkyX library is a simple static web project for downloading IPAs from your favourite repos.<br/>
-  The project is designed to be lightweight, easy to customize, and ready for GitHub Pages.<br/>
+  The project is designed to be lightweight, easy to customize, and ready for a static deploy.<br/>
   Your favourite library, with the repos you need, all in one place.
 </p>
 
 <p align="center">
-  🔗 <strong>Live:</strong> <a href="https://gablilli.github.io/chocomilkyX/">https://gablilli.github.io/chocomilkyX/</a>
+  🔗 <strong>Live:</strong> <a href="https://chocomilkyX.vercel.app">https://chocomilkyX.vercel.app</a>
 </p>
 
 
 ---
 
+> [!note]
+> 28 jan '26 - migrated the site's address to vercel, for better recheability.
+> nothing has changed in the code.
+
 ## ✨ features
 
 - static html webpage  
-- ready for github pages  
+- ready for github pages or vercel 
 - minimal and lightweight  
 - personal repos import
 
