@@ -32,6 +32,7 @@
 - static html webpage  
 - ready for github pages or vercel 
 - minimal and lightweight  
+- pwa support
 - personal repos import
 
 ## contribute to the project
