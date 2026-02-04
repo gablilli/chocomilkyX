@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="https://gablilli.github.io/chocomilkyX/static/icons/logo1024x1024.png" alt="Choco MilkyX Logo" width="200"/>
+  <img src="https://raw.githubusercontent.com/gablilli/chocomilkyX/refs/heads/main/static/icons/logo1024x1024.png" alt="Choco MilkyX Logo" width="200"/>
 </p>
 
 <h1 align="center">chocomilkyX Proxy</h1>
