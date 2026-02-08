@@ -3,10 +3,9 @@ import fetch from 'node-fetch';
 export default async function handler(req, res) {
   const allowedOrigin = 'https://chocomilkyx.vercel.app';
   const origin = req.headers.origin;
-
-  if (origin !== allowedOrigin) {
-    res.status(403).send('Forbidden');
-    return;
+  
+  if (origin && origin !== allowedOrigin) {
+    return res.status(403).send('Forbidden');
   }
 
   if (req.method === 'OPTIONS') {
