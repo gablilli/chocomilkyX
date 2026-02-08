@@ -1,6 +1,6 @@
 {
   "repos": [
-    { "url": "https://repository.apptesters.org/" },
+    { "url": "https://repository.apptesters.org/apps.json" },
     { "url": "https://driftywinds.github.io/AltStore/apps.json" },
     { "url": "https://raw.githubusercontent.com/titouan336/Spotify-AltStoreRepo-mirror/refs/heads/main/source.json" },
     { "url": "https://gablilli.github.io/somereposblocked/cypwn.json" },
@@ -31,6 +31,7 @@
     { "url": "https://raw.githubusercontent.com/khcrysalis/Feather/main/app-repo.json" },
     { "url": "https://appstore.nabzclan.vip/repos/altstore.php" },
     { "url": "https://flyinghead.github.io/flycast-builds/altstore.json" },
+    { "url": "https://alt.thatstel.la/" },
     { "url": "https://gablilli.github.io/somereposblocked/app.json" },
     { "url": "https://alt.crystall1ne.dev/", "useProxy": true },
     { "url": "https://apps.sidestore.io/" },
