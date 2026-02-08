@@ -31,7 +31,7 @@
     { "url": "https://raw.githubusercontent.com/khcrysalis/Feather/main/app-repo.json" },
     { "url": "https://appstore.nabzclan.vip/repos/altstore.php" },
     { "url": "https://flyinghead.github.io/flycast-builds/altstore.json" },
-    { "url": "https://alt.thatstel.la/" },
+    { "url": "https://alt.thatstel.la/", "useProxy": true },
     { "url": "https://gablilli.github.io/somereposblocked/app.json" },
     { "url": "https://alt.crystall1ne.dev/", "useProxy": true },
     { "url": "https://apps.sidestore.io/" },
