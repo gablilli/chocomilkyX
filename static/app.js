@@ -17,7 +17,7 @@ let filteredApps = [];
 let loaded = 0;
 let lastScrollY = 0;
 
-const proxy = "https://chocomilky-proxy.vercel.app/api/proxy?url=";
+const proxy = "https://chocomilkyX.vercel.app/api/proxy?url=";
 
 /* ================= pwa =================== */
 if ("serviceWorker" in navigator) {
