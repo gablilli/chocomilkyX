@@ -23,9 +23,9 @@
 
 ---
 
-> [!note]
-> 28 jan '26 - migrated the site's address to vercel, for better recheability.
-> nothing has changed in the code.
+> [!IMPORTANT]
+> 10 feb 26 - If you have trouble with fetching repos, just clean your cache or reinstall the pwa.
+> global repos json's path was changed.
 
 ## ✨ features
 
