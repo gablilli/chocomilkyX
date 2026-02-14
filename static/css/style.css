@@ -449,41 +449,41 @@ button:active,
   display: grid;
   gap: 12px;
   overflow-x: auto;
-  margin-bottom: 16px;
-  margin-top: 16px;
+  margin: 16px 0;
 }
 
+/* wrapper */
 .screenshots img {
   width: 100%;
-  height: auto;
   max-height: 360px;
   border-radius: 18px;
   box-shadow: var(--shadow);
   object-fit: contain;
+  display: block;
 }
 
-/* if it has 1 screenshot */
+/* 1 screenshot */
 .screenshots:has(img:only-child) {
   grid-template-columns: 1fr;
   max-width: 360px;
   margin-inline: auto;
 }
 
-/* if it has 2 screenshots */
+/* 2 screenshot */
 .screenshots:has(img:nth-child(2):last-child) {
   grid-template-columns: repeat(2, 1fr);
   max-width: 520px;
   margin-inline: auto;
 }
 
-/* if it has 3 screenshots */
+/* 3 screenshot */
 .screenshots:has(img:nth-child(3):last-child) {
   grid-template-columns: repeat(3, 1fr);
   max-width: 720px;
   margin-inline: auto;
 }
 
-/* more than 4 then scroll */
+/* more than 3 shots? scroll */
 .screenshots:not(:has(img:nth-child(3):last-child)) {
   grid-auto-flow: column;
   grid-auto-columns: 70%;
@@ -491,7 +491,6 @@ button:active,
 }
 
 /* versions css */
-
 .versions {
   margin-top: 24px;
 }
