@@ -97,7 +97,8 @@ function openAppInfo(app) {
           v${v.version} · ${v.date || ""}
         </a>
       `).join("");
-    
+  }
+  
   const permWrap = appInfoModal.querySelector(".permissions");
   const ent = app.appPermissions?.entitlements || [];
   permWrap.innerHTML = ent.length
