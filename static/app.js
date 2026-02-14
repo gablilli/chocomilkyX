@@ -26,8 +26,6 @@ appInfoModal.id = "appInfoModal";
 
 appInfoModal.innerHTML = `
   <div class="appinfo-box">
-    <button class="close" aria-label="Close"></button>
-
     <div class="appinfo-header">
       <img class="appicon">
       <div>
@@ -42,8 +40,6 @@ appInfoModal.innerHTML = `
 
     <div class="screenshots"></div>
 
-    <div class="other-versions"></div>
-
     <div class="permissions"></div>
   </div>
 `;
@@ -55,6 +51,7 @@ function openAppInfo(app) {
 
   appInfoModal.querySelector(".appicon").src = app.iconURL || "";
   appInfoModal.querySelector(".appname").textContent = app.name || "";
+  appInfoModal.querySelector(".versions")?.remove();
   appInfoModal.querySelector(".developer").textContent =
     app.developerName?.trim() || app.__repoName || "Unknown developer";
 
@@ -79,26 +76,36 @@ function openAppInfo(app) {
     []; 
 
   shots.forEach(s => {
-    const img = document.createElement("img");
-    img.src = typeof s === "string" ? s : s.imageURL;
-    shotsWrap.appendChild(img);
+    const src = typeof s === "string" ? s : s.imageURL;
+    const img = new Image();
+    img.onload = () => shotsWrap.appendChild(img);
+    img.onerror = () => {};
+    img.src = src;
   });
 
   /* previous versions */
-  const versionsWrap = appInfoModal.querySelector(".other-versions");
-  versionsWrap.innerHTML = "";
-  
+  const versionsWrap = document.createElement("div");
+  versionsWrap.className = "versions";
   const versions = app.versions || [];
-  if (versions.length > 1) {
-    versionsWrap.innerHTML =
-      `<h3>Other versions</h3>` +
-      versions.slice(1).map(v => `
-        <a href="${v.downloadURL}" target="_blank">
-          v${v.version} · ${v.date || ""}
-        </a>
-      `).join("");
-  }
   
+  if (versions.length > 1) {
+    versionsWrap.innerHTML = `<h3>Previous Versions</h3>`;
+  
+    versions.slice(0, 5).forEach(v => {
+      const row = document.createElement("div");
+      row.className = "version-row";
+  
+      row.innerHTML = `
+        <span class="version-badge">${v.version}</span>
+        <a class="download" href="${v.downloadURL}" target="_blank">Download</a>
+      `;
+  
+      versionsWrap.appendChild(row);
+    });
+  
+    appInfoModal.querySelector(".appinfo-box").appendChild(versionsWrap);
+  }
+
   const permWrap = appInfoModal.querySelector(".permissions");
   const ent = app.appPermissions?.entitlements || [];
   permWrap.innerHTML = ent.length
@@ -109,8 +116,11 @@ function openAppInfo(app) {
 }
 
 /* close handlers */
-appInfoModal.querySelector(".close").onclick = () =>
-  appInfoModal.classList.remove("show");
+appInfoModal.addEventListener("click", e => {
+  if (e.target === appInfoModal) {
+    appInfoModal.classList.remove("show");
+  }
+});
 
 window.addEventListener("keydown", e => {
   if (e.key === "Escape" && appInfoModal.classList.contains("show")) {
