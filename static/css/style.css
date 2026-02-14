@@ -454,11 +454,12 @@ button:active,
 }
 
 .screenshots img {
-  height: 360px;
+  width: 100%;
+  height: auto;
+  max-height: 360px;
   border-radius: 18px;
   box-shadow: var(--shadow);
-  width: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 /* if it has 1 screenshot */
