@@ -70,22 +70,20 @@ function openAppInfo(app) {
 
   const shotsWrap = appInfoModal.querySelector(".screenshots");
   shotsWrap.innerHTML = "";
+  shotsWrap.className = "screenshots";
   
   const shots =
     app.screenshots?.iphone ||
     app.screenshotURLs ||
     [];
-  
+
   shots.forEach(s => {
     const src = typeof s === "string" ? s : s.imageURL;
     const img = new Image();
-    img.onload = () => {
-      if (shotsWrap.parentElement.classList.contains("show")) {
-        shotsWrap.appendChild(img);
-      }
-    };
-    img.onerror = () => {};
     img.src = src;
+    img.alt = app.name || "Screenshot";
+    shotsWrap.appendChild(img);
+    img.onerror = () => {};
   });
 
   /* previous versions */
