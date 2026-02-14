@@ -447,7 +447,7 @@ button:active,
 
 .screenshots {
   display: grid;
-  gap: 12px;
+  gap: 0px;
   overflow-x: auto;
   margin: 16px 0;
   grid-auto-flow: column;
