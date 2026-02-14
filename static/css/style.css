@@ -222,11 +222,9 @@ h1 {
   box-shadow: 0 0 0 1px rgba(255,69,58,.12) inset;
 }
 
-/* buttons */
 button,
 #importBtn,
-#importModal button,
-.download {
+#importModal button {
   appearance: none;
   border: none;
   border-radius: 999px;
@@ -242,7 +240,31 @@ button,
 }
 
 button:active,
-.card .download:active {
+#importBtn:active,
+#importModal button:active {
+  transform: scale(.94);
+  box-shadow: 0 6px 14px rgba(10,132,255,.32);
+}
+
+/* download */
+.download {
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(10,132,255,.22);
+  transition:
+    transform .22s var(--ease),
+    box-shadow .22s var(--ease),
+    filter .22s;
+}
+
+.download:active {
   transform: scale(.94);
   box-shadow: 0 6px 14px rgba(10,132,255,.32);
 }
