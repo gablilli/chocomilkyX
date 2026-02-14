@@ -1,7 +1,11 @@
 import fetch from 'node-fetch';
 
 export default async function handler(req, res) {
-  const allowedOrigin = 'https://chocomilkyx.vercel.app';
+  const allowedOrigins = [
+    'https://chocomilkyx.vercel.app',
+    'https://chocomilkyx-dev.vercel.app'
+  ];
+  
   const origin = req.headers.origin;
   
   if (origin && origin !== allowedOrigin) {
