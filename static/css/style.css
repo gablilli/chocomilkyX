@@ -439,6 +439,12 @@ button:active,
   color: var(--subtle);
 }
 
+.developer {
+  font-size: 13px;
+  color: var(--subtle);
+  margin-top: 2px;
+}
+
 .description {
   font-size: 14px;
   line-height: 1.5;
@@ -447,11 +453,11 @@ button:active,
 
 .screenshots {
   display: grid;
-  gap: 0px;
+  gap: 0;
   overflow-x: auto;
   margin: 16px 0;
   grid-auto-flow: column;
-  grid-auto-columns: auto;
+  grid-auto-columns: max-content;
   scroll-snap-type: x mandatory;
   padding-inline: 0;
 }
@@ -459,12 +465,17 @@ button:active,
 /* wrapper */
 .screenshots img {
   display: block;
+  height: 360px;
   width: auto;
-  max-height: 360px;
-  border-radius: 18px; 
+  border-radius: 18px;
   box-shadow: var(--shadow);
-  object-fit: cover; 
+  object-fit: cover;
   scroll-snap-align: start;
+  margin-right: 10px;
+}
+
+.screenshots img:last-child {
+  margin-right: 0;
 }
 
 /* 1 screenshot */
@@ -472,26 +483,29 @@ button:active,
   grid-template-columns: 1fr;
   max-width: 360px;
   margin-inline: auto;
+  justify-content: center;
 }
 
 /* 2 screenshot */
 .screenshots:has(img:nth-child(2):last-child) {
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, auto);
   max-width: 520px;
   margin-inline: auto;
+  justify-content: center;
 }
 
 /* 3 screenshot */
 .screenshots:has(img:nth-child(3):last-child) {
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, auto);
   max-width: 720px;
   margin-inline: auto;
+  justify-content: center;
 }
 
 /* more than 3 shots? scroll */
-.screenshots:not(:has(img:nth-child(3):last-child)) {
+.screenshots:not(:has(img:nth-child(3):last-child))) {
   grid-auto-flow: column;
-  grid-auto-columns: 70%;
+  grid-auto-columns: max-content;
   overflow-x: auto;
 }
 
