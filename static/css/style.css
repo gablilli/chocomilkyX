@@ -396,10 +396,18 @@ button:active,
   max-height: calc(100vh - 80px);
 }
 
+.appinfo-header h2,
+.appinfo-header .developer {
+  display: block;
+}
+
 .appinfo-header {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
+  align-items: center;
+}
+
+.appinfo-header h2 {
+  margin-bottom: 0;
+  line-height: 1.15;
 }
 
 #appInfoModal .close {
@@ -483,8 +491,13 @@ button:active,
 .screenshots:has(img:only-child) {
   display: flex;
   justify-content: center;
-  max-width: 360px;
-  margin-inline: auto;
+  align-items: center;
+  grid-auto-flow: unset;
+  grid-auto-columns: unset;
+  width: 100%;
+}
+
+.screenshots:has(img:only-child) img {
   margin-right: 0;
 }
 
