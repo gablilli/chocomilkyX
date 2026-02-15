@@ -19,6 +19,124 @@ let lastScrollY = 0;
 
 const proxy = "https://chocomilkyX.vercel.app/api/proxy?url=";
 
+/* ================= app detail =================== */
+
+const appInfoModal = document.createElement("div");
+appInfoModal.id = "appInfoModal";
+
+appInfoModal.innerHTML = `
+  <div class="appinfo-box">
+    <button class="close" aria-label="Close"></button>
+    <div class="appinfo-header">
+      <img class="appicon">
+      <div>
+        <h2 class="appname"></h2>
+        <div class="developer"></div>
+      </div>
+    </div>
+
+    <div class="meta-grid"></div>
+
+    <div class="description"></div>
+
+    <div class="screenshots"></div>
+
+    <div class="permissions"></div>
+  </div>
+`;
+
+document.body.appendChild(appInfoModal);
+
+function openAppInfo(app) {
+  const latest = app.versions?.[0] || app;
+
+  appInfoModal.querySelector(".appicon").src = app.iconURL || "";
+  appInfoModal.querySelector(".appname").textContent = app.name || "";
+  appInfoModal.querySelector(".versions")?.remove();
+  appInfoModal.querySelector(".developer").textContent =
+    app.developerName?.trim() || app.__repoName || "Unknown developer";
+
+  const meta = appInfoModal.querySelector(".meta-grid");
+  meta.innerHTML = `
+    <div><span>Bundle ID</span>${app.bundleIdentifier || app.bundleID || "-"}</div>
+    <div><span>Version</span>${latest.version || "-"}</div>
+    <div><span>Published</span>${latest.versionDate || latest.date || "-"}</div>
+    <div><span>Size</span>${
+      latest.size ? ((latest.size)/1024/1024).toFixed(2)+" MB" : "-"
+    }</div>
+  `;
+
+  appInfoModal.querySelector(".description").textContent =
+    app.localizedDescription || "No description provided.";
+
+  const shotsWrap = appInfoModal.querySelector(".screenshots");
+  shotsWrap.innerHTML = "";
+  shotsWrap.className = "screenshots";
+  
+  const shots =
+    app.screenshots?.iphone ||
+    app.screenshotURLs ||
+    [];
+
+  shots.forEach(s => {
+    const src = typeof s === "string" ? s : s.imageURL;
+    const img = new Image();
+    img.src = src;
+    img.alt = app.name || "Screenshot";
+    shotsWrap.appendChild(img);
+    img.onerror = () => {};
+  });
+
+  /* previous versions */
+  const versionsWrap = document.createElement("div");
+  versionsWrap.className = "versions";
+  const versions = app.versions || [];
+  
+  if (versions.length > 1) {
+    versionsWrap.innerHTML = `<h3>Previous Versions</h3>`;
+  
+    versions.slice(0, 5).forEach(v => {
+      const row = document.createElement("div");
+      row.className = "version-row";
+  
+      row.innerHTML = `
+        <span class="version-badge">${v.version}</span>
+        <a class="download" href="${v.downloadURL}" target="_blank">Download</a>
+      `;
+  
+      versionsWrap.appendChild(row);
+    });
+  
+    appInfoModal.querySelector(".appinfo-box").appendChild(versionsWrap);
+  }
+
+  const permWrap = appInfoModal.querySelector(".permissions");
+  const ent = app.appPermissions?.entitlements || [];
+  permWrap.innerHTML = ent.length
+    ? `<h3>Permissions</h3>` + ent.map(e => `<span>${e}</span>`).join("")
+    : "";
+
+  appInfoModal.classList.add("show");
+}
+
+/* close handlers */
+appInfoModal.addEventListener("click", e => {
+  if (e.target === appInfoModal) {
+    appInfoModal.classList.remove("show");
+  }
+});
+
+/* X */
+appInfoModal.querySelector(".close").addEventListener("click", () => {
+  appInfoModal.classList.remove("show");
+});
+
+window.addEventListener("keydown", e => {
+  if (e.key === "Escape" && appInfoModal.classList.contains("show")) {
+    appInfoModal.classList.remove("show");
+  }
+});
+
 /* ================= pwa =================== */
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
@@ -397,6 +515,15 @@ function renderApps(apps, append=false) {
       <div class="subtitle">${desc}</div>
       <a class="download" href="${downloadURL}" target="_blank">Download</a>
     `;
+  
+      card.addEventListener("click", e => {
+    if (
+      e.target.closest(".download") ||
+      e.target.closest("a")
+    ) return;
+  
+    openAppInfo(app);
+  });
 
     appsArea.appendChild(card);
     requestAnimationFrame(() => setTimeout(() => card.classList.add("show"), i * 70));
@@ -530,7 +657,9 @@ importModal.addEventListener("click", e => {
 });
 
 window.addEventListener("keydown", e => {
-  if (e.key === "Escape") closeImportModal();
+  if (e.key === "Escape" && importModal.classList.contains("show")) {
+    closeImportModal();
+  }
 });
 
 /* ================= boot ================= */
