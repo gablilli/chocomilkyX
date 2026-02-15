@@ -12,9 +12,9 @@
 
 
 <p align="center">
-  The chocomilkyX library is a simple static web project for downloading IPAs from your favourite repos.<br/>
-  The project is designed to be lightweight, easy to customize, and ready for a static deploy.<br/>
-  Your favourite library, with the repos you need, all in one place.
+  the chocomilkyX library is a simple static web project for downloading iPAs from your favourite repos.<br/>
+  the project is designed to be lightweight, easy to customize, and ready for a static deploy.<br/>
+  your favourite library, with the repos you need, all in one place.
 </p>
 
 <p align="center">
@@ -27,13 +27,13 @@
 > 10 feb 26 - If you have trouble with fetching repos, just clean your cache or reinstall the pwa.
 > global repos json's path was changed.
 
-## ✨ features
+## ✨ some features
 
-- static html webpage  
-- ready for github pages or vercel 
-- minimal and lightweight  
-- pwa support
-- personal repos import
+- import personal repos
+- view app details without installing them
+- add it as an app on your phone
+- deploy to vercel or github pages instantly
+- minimal and lightweight
 
 ## contribute to the project
 
@@ -98,5 +98,3 @@ This project is a **revived version**, maintaining compatibility with the origin
 
 this project is licensed under the **gpl v3 license**.
 see the `license` file for details.
-
-
