@@ -394,6 +394,7 @@ button:active,
   box-shadow: var(--shadow);
   overflow-y: auto;
   max-height: calc(100vh - 80px);
+  position: relative;
 }
 
 .appinfo-header h2,
@@ -412,20 +413,32 @@ button:active,
 
 #appInfoModal .close {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 12px;
+  right: 12px;
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.08);
-  border: 0;
+  background: rgba(255,255,255,0.12);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  z-index: 2;
 }
+
 
 #appInfoModal .close::before {
   content: "×";
-  font-size: 20px;
-  color: #bbb;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1;
+  color: #fff;
+}
+
+#appInfoModal .close:active {
+  transform: scale(0.9);
+  background: rgba(255,255,255,0.2);
 }
 
 .appinfo-header img {
