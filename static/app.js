@@ -279,7 +279,14 @@ async function loadRepos() {
       return;
     }
 
-    const reposData = await loadAllRepos(globals.repos);
+    const rawResults = await Promise.all(
+    globals.repos.map(async (repo) => {
+      const data = await fetchRepo(repo);
+      return data ? { data, repoMeta: repo } : null;
+    })
+  );
+  
+  const reposData = rawResults.filter(Boolean);
 
     allAppsIndex = [];
     allAppsIndex._keys = new Set();
@@ -290,33 +297,70 @@ async function loadRepos() {
     filteredApps = currentApps.slice();
     loaded = 0;
 
-    reposArea.innerHTML = "";
-
-    reposData.forEach((data, i) => {
-      const repoMeta = globals.repos[i];
-      const first = data.apps?.[0] || {};
-      const icon = data.iconURL || first.iconURL || "";
-      const name = data.name || first.name || "Unnamed Repo";
-      const desc = data.description || first.subtitle || first.localizedDescription || "";
-
-      const div = document.createElement("div");
-      div.className = "repo-card";
-      div.dataset.url = repoMeta.url;
-
-      div.innerHTML = `
-        <img src="${icon}" alt="">
-        <div class="repo-info">
-          <div class="repo-name">${name}</div>
-          <div class="repo-desc">${desc}</div>
-        </div>
-        <div class="repo-actions">
-          <button class="openBtn" data-url="${repoMeta.url}" data-use-proxy="${repoMeta.useProxy || false}">Open</button>
-          <button class="copyBtn" data-url="${repoMeta.url}">Copy URL</button>
-        </div>
-      `;
-
-      reposArea.appendChild(div);
-      requestAnimationFrame(() => setTimeout(() => div.classList.add("show"), i * 60));
+  reposArea.innerHTML = "";
+  
+  // categories
+  const grouped = {};
+  
+  reposData.forEach(({ data, repoMeta }) => {
+    const category = repoMeta.category || "general";
+  
+    if (!grouped[category]) grouped[category] = [];
+    grouped[category].push({ data, repoMeta });
+  });
+  
+  const categoryOrder = ["developer", "community", "general"];
+  
+  Object.keys(grouped)
+    .sort((a, b) => {
+      const ai = categoryOrder.indexOf(a);
+      const bi = categoryOrder.indexOf(b);
+      if (ai === -1 && bi === -1) return a.localeCompare(b);
+      if (ai === -1) return 1;
+      if (bi === -1) return -1;
+      return ai - bi;
+    })
+    .forEach(category => {
+  
+      const title = document.createElement("div");
+      title.className = "repo-category-title";
+      title.textContent =
+        category.charAt(0).toUpperCase() + category.slice(1);
+  
+      reposArea.appendChild(title);
+  
+      grouped[category].forEach(({ data, repoMeta }, i) => {
+  
+        const first = data.apps?.[0] || {};
+        const icon = data.iconURL || first.iconURL || "";
+        const name = data.name || first.name || "Unnamed Repo";
+        const desc =
+          data.description ||
+          first.subtitle ||
+          first.localizedDescription ||
+          "";
+  
+        const div = document.createElement("div");
+        div.className = "repo-card";
+        div.dataset.url = repoMeta.url;
+  
+        div.innerHTML = `
+          <img src="${icon}" alt="">
+          <div class="repo-info">
+            <div class="repo-name">${name}</div>
+            <div class="repo-desc">${desc}</div>
+          </div>
+          <div class="repo-actions">
+            <button class="openBtn" data-url="${repoMeta.url}" data-use-proxy="${repoMeta.useProxy || false}">Open</button>
+            <button class="copyBtn" data-url="${repoMeta.url}">Copy URL</button>
+          </div>
+        `;
+  
+        reposArea.appendChild(div);
+        requestAnimationFrame(() =>
+          setTimeout(() => div.classList.add("show"), i * 60)
+        );
+      });
     });
 
     searchBar.style.display = "flex";
