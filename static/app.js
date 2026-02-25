@@ -270,7 +270,7 @@ async function loadRepos() {
   reposArea.innerHTML = `<div class="loading-line">Loading libraries…</div>`;
 
   try {
-    const res = await fetch("https://raw.githubusercontent.com/gablilli/chocomilkyX/refs/heads/main/static/global-repos.json");
+    const res = await fetch("/static/global-repos.json");
     const globals = await res.json();
 
     if (!globals.repos?.length) {
