@@ -195,6 +195,16 @@ h1 {
   color: var(--subtle);
 }
 
+.repo-category-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  color: var(--subtle);
+  margin: 18px 0 10px 4px;
+  opacity: .75;
+}
+
 /* repo actions */
 .repo-actions {
   display: flex;
