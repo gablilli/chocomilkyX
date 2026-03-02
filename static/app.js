@@ -476,21 +476,47 @@ function applySearch() {
   const isGlobalSearch = !viewingRepoUrl;
   const baseApps = isGlobalSearch ? allAppsIndex : currentApps;
 
+  if (!q) {
+    if (isGlobalSearch) {
+      reposArea.style.display = "";
+      appsArea.innerHTML = "";
+      filteredApps = [];
+      loaded = 0;
+      window.onscroll = null;
+      toggleVersionSort({ show: false });
+      [...reposArea.children].forEach((el, i)=>{
+        el.classList.remove("show");
+        requestAnimationFrame(() => setTimeout(() => el.classList.add("show"), i*60));
+      });
+    } else {
+      filteredApps = sortApps(baseApps);
+      loaded = 0;
+      appsArea.innerHTML = "";
+      renderNextBatch();
+      toggleVersionSort({ show: true, inRepo: true, hasQuery: false });
+    }
+    return;
+  }
+
   filteredApps = baseApps.filter(app =>
-    app.name?.toLowerCase().includes(q) ||
-    app.subtitle?.toLowerCase().includes(q) ||
-    app.localizedDescription?.toLowerCase().includes(q)
+    (app.name?.toLowerCase().includes(q)) ||
+    (app.subtitle?.toLowerCase().includes(q)) ||
+    (app.localizedDescription?.toLowerCase().includes(q))
   );
 
   filteredApps = sortApps(filteredApps);
   loaded = 0;
   appsArea.innerHTML = "";
 
-  renderNextBatch();
+  if (filteredApps.length === 0) {
+    appsArea.innerHTML = `<div class="loading-line">No apps found.</div>`;
+  } else {
+    renderNextBatch();
+  }
 
-  reposArea.style.display = isGlobalSearch ? "none" : "";
+  if (isGlobalSearch) reposArea.style.display = "none";
 
-  toggleVersionSort({ show: true, inRepo: !!viewingRepoUrl, hasQuery: q.length > 0 });
+  toggleVersionSort({ show: true, inRepo: !!viewingRepoUrl, hasQuery: true });
 
   window.onscroll = () => {
     if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 120){
