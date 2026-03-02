@@ -479,7 +479,6 @@ function applySearch() {
 
   if (!q) {
     if (!viewingRepoUrl) {
-      // FIX GLOBAL SEARCH: quando non c'è query mostra tutte le app globali
       reposArea.style.display = "";
       appsArea.innerHTML = "";
       filteredApps = [];
@@ -501,21 +500,21 @@ function applySearch() {
     return;
   }
 
-  // quando c'è una query
+  // when is a query
   filteredApps = sortApps(base.filter(a => a.name?.toLowerCase().includes(q)));
   loaded = 0;
   appsArea.innerHTML = "";
   renderNextBatch();
   toggleVersionSort({ show: true, inRepo: viewingRepoUrl, hasQuery: true });
 
-  // scroll per infinite
+  // scroll for infinite
   window.onscroll = () => {
     if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 120){
       if(loaded < filteredApps.length) renderNextBatch();
     }
   };
 
-  // nascondi repo list se globale search
+  // hide repo list if global search
   if (isGlobalSearch) reposArea.style.display = "none";
 }
 
