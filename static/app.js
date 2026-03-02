@@ -474,54 +474,35 @@ function renderNextBatch() {
 function applySearch() {
   const q = searchInput.value.trim().toLowerCase();
   const isGlobalSearch = !viewingRepoUrl;
-  const hasQuery = q.length > 0;
-  const base = viewingRepoUrl ? currentApps : allAppsIndex;
+  const baseApps = isGlobalSearch ? allAppsIndex : currentApps;
 
-  if (!q) {
-    if (!viewingRepoUrl) {
-      reposArea.style.display = "";
-      appsArea.innerHTML = "";
-      filteredApps = [];
-      loaded = 0;
-      window.onscroll = null;
-      toggleVersionSort({ show: false });
-      [...reposArea.children].forEach((el, i)=>{
-        el.classList.remove("show");
-        requestAnimationFrame(()=>setTimeout(()=>el.classList.add("show"),i*60));
-      });
-      return;
-    }
+  filteredApps = baseApps.filter(app =>
+    app.name?.toLowerCase().includes(q) ||
+    app.subtitle?.toLowerCase().includes(q) ||
+    app.localizedDescription?.toLowerCase().includes(q)
+  );
 
-    filteredApps = sortApps(base);
-    loaded = 0;
-    appsArea.innerHTML = "";
-    renderNextBatch();
-    toggleVersionSort({ show: true, inRepo: true, hasQuery: false });
-    return;
-  }
-
-  // when is a query
-  filteredApps = sortApps(base.filter(a => a.name?.toLowerCase().includes(q)));
+  filteredApps = sortApps(filteredApps);
   loaded = 0;
   appsArea.innerHTML = "";
-  renderNextBatch();
-  toggleVersionSort({ show: true, inRepo: viewingRepoUrl, hasQuery: true });
 
-  // scroll for infinite
+  renderNextBatch();
+
+  reposArea.style.display = isGlobalSearch ? "none" : "";
+
+  toggleVersionSort({ show: true, inRepo: !!viewingRepoUrl, hasQuery: q.length > 0 });
+
   window.onscroll = () => {
     if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 120){
       if(loaded < filteredApps.length) renderNextBatch();
     }
   };
-
-  // hide repo list if global search
-  if (isGlobalSearch) reposArea.style.display = "none";
 }
 
 let searchTimeout;
-searchInput.addEventListener("input",()=>{
+searchInput.addEventListener("input", () => {
   clearTimeout(searchTimeout);
-  searchTimeout=setTimeout(applySearch,250);
+  searchTimeout = setTimeout(applySearch, 200);
 });
 
 /* ================= render apps ================= */
