@@ -291,7 +291,7 @@ async function loadRepos() {
     allAppsIndex = [];
     allAppsIndex._keys = new Set();
 
-    reposData.forEach(indexRepoApps);
+    reposData.forEach(({ data }) => indexRepoApps(data));
 
     currentApps = allAppsIndex.slice();
     filteredApps = currentApps.slice();
