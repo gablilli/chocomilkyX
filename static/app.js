@@ -291,7 +291,7 @@ async function loadRepos() {
     allAppsIndex = [];
     allAppsIndex._keys = new Set();
 
-    reposData.forEach(indexRepoApps);
+    reposData.forEach(({ data }) => indexRepoApps(data));
 
     currentApps = allAppsIndex.slice();
     filteredApps = currentApps.slice();
@@ -409,7 +409,7 @@ function renderRepoCard(repoData,repoUrl,useProxy=true,isUserRepo=true){
   div.className="repo-card";
   div.dataset.url=repoUrl;
 
-  div.innerHTML=`
+  div.innerHTML = `
     <img src="${icon}">
     <div class="repo-info">
       <div class="repo-name">${name}</div>
@@ -474,53 +474,61 @@ function renderNextBatch() {
 function applySearch() {
   const q = searchInput.value.trim().toLowerCase();
   const isGlobalSearch = !viewingRepoUrl;
-  const hasQuery = q.length > 0;
-  const base = viewingRepoUrl ? currentApps : allAppsIndex;
+  const baseApps = isGlobalSearch ? allAppsIndex : currentApps;
 
   if (!q) {
-    if (!viewingRepoUrl) {
+    if (isGlobalSearch) {
       reposArea.style.display = "";
       appsArea.innerHTML = "";
-      [...reposArea.children].forEach((el,i)=>{
-        el.classList.remove("show");
-        requestAnimationFrame(()=>setTimeout(()=>el.classList.add("show"),i*60));
-      });
-      filteredApps=[];
-      loaded=0;
-      window.onscroll=null;
+      filteredApps = [];
+      loaded = 0;
+      window.onscroll = null;
       toggleVersionSort({ show: false });
-      return;
+      [...reposArea.children].forEach((el, i)=>{
+        el.classList.remove("show");
+        requestAnimationFrame(() => setTimeout(() => el.classList.add("show"), i*60));
+      });
+    } else {
+      filteredApps = sortApps(baseApps);
+      loaded = 0;
+      appsArea.innerHTML = "";
+      renderNextBatch();
+      toggleVersionSort({ show: true, inRepo: true, hasQuery: false });
     }
-
-    filteredApps = sortApps(base);
-    loaded = 0;
-    appsArea.innerHTML = "";
-    renderNextBatch();
-    toggleVersionSort({ show: true, inRepo: true, hasQuery: false });
     return;
   }
 
-  if (!viewingRepoUrl) reposArea.style.display = "none";
+  filteredApps = baseApps.filter(app =>
+    (app.name?.toLowerCase().includes(q)) ||
+    (app.subtitle?.toLowerCase().includes(q)) ||
+    (app.localizedDescription?.toLowerCase().includes(q))
+  );
 
-  filteredApps = sortApps(base.filter(a => a.name?.toLowerCase().includes(q)));
+  filteredApps = sortApps(filteredApps);
   loaded = 0;
   appsArea.innerHTML = "";
-  renderNextBatch();
-  toggleVersionSort({ show: true, inRepo: viewingRepoUrl, hasQuery: true });
 
-  if (!viewingRepoUrl) {
-    window.onscroll = () => {
-      if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 120){
-        if(loaded < filteredApps.length) renderNextBatch();
-      }
-    };
+  if (filteredApps.length === 0) {
+    appsArea.innerHTML = `<div class="loading-line">No apps found.</div>`;
+  } else {
+    renderNextBatch();
   }
+
+  if (isGlobalSearch) reposArea.style.display = "none";
+
+  toggleVersionSort({ show: true, inRepo: !!viewingRepoUrl, hasQuery: true });
+
+  window.onscroll = () => {
+    if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 120){
+      if(loaded < filteredApps.length) renderNextBatch();
+    }
+  };
 }
 
 let searchTimeout;
-searchInput.addEventListener("input",()=>{
+searchInput.addEventListener("input", () => {
   clearTimeout(searchTimeout);
-  searchTimeout=setTimeout(applySearch,250);
+  searchTimeout = setTimeout(applySearch, 200);
 });
 
 /* ================= render apps ================= */
@@ -560,14 +568,14 @@ function renderApps(apps, append=false) {
       <a class="download" href="${downloadURL}" target="_blank">Download</a>
     `;
   
-      card.addEventListener("click", e => {
-    if (
-      e.target.closest(".download") ||
-      e.target.closest("a")
-    ) return;
+    card.addEventListener("click", e => {
+      if (
+        e.target.closest(".download") ||
+        e.target.closest("a")
+      ) return;
   
-    openAppInfo(app);
-  });
+      openAppInfo(app);
+    });
 
     appsArea.appendChild(card);
     requestAnimationFrame(() => setTimeout(() => card.classList.add("show"), i * 70));
