@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SideStore Test</title>
+<style>
+button{
+    padding:12px 20px;
+    font-size:16px;
+    cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<h2>Test Install</h2>
+
+<button onclick="install()">Install with SideStore</button>
+
+<script>
+function install(){
+    window.location.href = "sidestore://install?url=https://github.com/StephenDev0/StikDebug/releases/download/3.0.0/StikDebug-3.0.0.ipaa";
+}
+</script>
+
+</body>
+</html>
