@@ -6,7 +6,6 @@
     { "url": "https://gablilli.github.io/somereposblocked/cypwn.json", "category": "tweaked" },
     { "url": "https://qnblackcat.github.io/AltStore/apps.json", "category": "community" },
     { "url": "https://wuxu1.github.io/wuxu-complete-plus.json", "category": "tweaked" },
-    { "url": "https://raw.githubusercontent.com/TheNightmanCodeth/chromium-ios/master/altstore-source.json", "category": "developer" },
     { "url": "https://community-apps.sidestore.io/sidecommunity.json", "category": "community" },
     { "url": "https://gablilli.github.io/somereposblocked/repo.json", "category": "tweaked" },
     { "url": "https://stikdebug.xyz/index.json", "useProxy": true, "category": "developer" },
