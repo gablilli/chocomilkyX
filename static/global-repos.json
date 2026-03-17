@@ -1,6 +1,6 @@
 {
   "repos": [
-    { "url": "https://repository.apptesters.org/apps.json", "category": "tweaked" },
+    { "url": "https://fastsign.dev/repo.json", "category": "tweaked" },
     { "url": "https://driftywinds.github.io/AltStore/apps.json", "category": "tweaked" },
     { "url": "https://raw.githubusercontent.com/titouan336/Spotify-AltStoreRepo-mirror/refs/heads/main/source.json", "category": "community" },
     { "url": "https://gablilli.github.io/somereposblocked/cypwn.json", "category": "tweaked" },
