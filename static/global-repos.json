@@ -7,7 +7,6 @@
     { "url": "https://qnblackcat.github.io/AltStore/apps.json", "category": "community" },
     { "url": "https://wuxu1.github.io/wuxu-complete-plus.json", "category": "tweaked" },
     { "url": "https://community-apps.sidestore.io/sidecommunity.json", "category": "community" },
-    { "url": "https://gablilli.github.io/somereposblocked/repo.json", "category": "tweaked" },
     { "url": "https://stikdebug.xyz/index.json", "useProxy": true, "category": "developer" },
     { "url": "https://raw.githubusercontent.com/lo-cafe/winston-altstore/main/apps.json", "category": "community" },
     { "url": "https://raw.githubusercontent.com/yodaluca23/SpotC-AltStore-Repo/main/AltStore%20Repo.json", "category": "community" },
