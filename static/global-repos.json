@@ -11,7 +11,6 @@
     { "url": "https://raw.githubusercontent.com/lo-cafe/winston-altstore/main/apps.json", "category": "community" },
     { "url": "https://raw.githubusercontent.com/yodaluca23/SpotC-AltStore-Repo/main/AltStore%20Repo.json", "category": "community" },
     { "url": "https://theodyssey.dev/altstore/odysseysource.json", "category": "developer" },
-    { "url": "https://provenance-emu.com/apps.json", "category": "developer" },
     { "url": "https://ish.app/altstore.json", "useProxy": true, "category": "developer" },
     { "url": "https://raw.githubusercontent.com/arichornlover/arichornlover.github.io/refs/heads/main/apps2.json", "category": "developer" },
     { "url": "https://raw.githubusercontent.com/tapframe/NuvioStreaming/main/nuvio-source.json", "category": "developer" },
