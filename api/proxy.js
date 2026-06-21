@@ -5,33 +5,21 @@ const allowedOrigins = [
   'https://chocomilkyx-dev.vercel.app'
 ];
 
-const PROXY_SECRET = process.env.PROXY_SECRET;
-
 export default async function handler(req, res) {
   const origin = req.headers.origin;
-  const token = req.headers['x-proxy-token'];
 
-  const hasValidOrigin = origin && allowedOrigins.includes(origin);
-  const hasValidToken = PROXY_SECRET && token === PROXY_SECRET;
-
-  if (!hasValidOrigin && !hasValidToken) {
+  if (!origin || !allowedOrigins.includes(origin)) {
     return res.status(403).send('Forbidden');
   }
 
-  if (origin && allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  }
+  res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-proxy-token');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (req.method === 'OPTIONS') {
-    return res.status(204).end();
-  }
+  if (req.method === 'OPTIONS') return res.status(204).end();
 
   const url = req.query.url;
-  if (!url) {
-    return res.status(400).send('Missing url parameter');
-  }
+  if (!url) return res.status(400).send('Missing url parameter');
 
   try {
     const parsed = new URL(url);
