@@ -1,37 +1,34 @@
 import fetch from 'node-fetch';
 
-const allowedOrigins = [
-  'https://chocomilkyx.vercel.app',
-  'https://chocomilkyx-dev.vercel.app'
-];
+const ALLOWED_URLS = {
+  'fastsign':        'https://fastsign.dev/repo.json',
+  'stikdebug':       'https://stikdebug.xyz/index.json',
+  'ish':             'https://ish.app/altstore.json',
+  'oatmealdome':     'https://altstore.oatmealdome.me/',
+  'thatsella':       'https://alt.thatstel.la/',
+  'crystall1ne':     'https://alt.crystall1ne.dev/',
+};
 
 export default async function handler(req, res) {
-  const origin = req.headers.origin;
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
+  if (req.method === 'OPTIONS') return res.status(204).end();
 
-  if (!origin || !allowedOrigins.includes(origin)) {
+  const key = req.query.repo;
+  if (!key || !ALLOWED_URLS[key]) {
     return res.status(403).send('Forbidden');
   }
 
-  res.setHeader('Access-Control-Allow-Origin', origin);
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') return res.status(204).end();
-
-  const url = req.query.url;
-  if (!url) return res.status(400).send('Missing url parameter');
-
   try {
-    const parsed = new URL(url);
-    if (!['http:', 'https:'].includes(parsed.protocol)) {
-      return res.status(400).send('Invalid URL protocol');
-    }
+    const parsed = new URL(ALLOWED_URLS[key]);
+    if (!['http:', 'https:'].includes(parsed.protocol))
+      return res.status(400).send('Invalid URL');
   } catch {
     return res.status(400).send('Invalid URL');
   }
 
   try {
-    const response = await fetch(url, { redirect: 'follow' });
+    const response = await fetch(ALLOWED_URLS[key], { redirect: 'follow' });
     const data = await response.text();
     res.status(200).send(data);
   } catch (err) {
