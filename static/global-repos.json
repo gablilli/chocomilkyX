@@ -13,7 +13,6 @@
     { "url": "https://theodyssey.dev/altstore/odysseysource.json", "category": "developer" },
     { "url": "/api/proxy?repo=ish", "category": "developer" },
     { "url": "https://raw.githubusercontent.com/arichornlover/arichornlover.github.io/refs/heads/main/apps2.json", "category": "developer" },
-    { "url": "https://raw.githubusercontent.com/tapframe/NuvioStreaming/main/nuvio-source.json", "category": "developer" },
     { "url": "https://raw.githubusercontent.com/LiveContainer/LiveContainer/refs/heads/main/.github/apps.json", "category": "developer" },
     { "url": "https://raw.githubusercontent.com/Balackburn/Apollo/refs/heads/main/apps.json", "category": "developer" },
     { "url": "https://repo.owo.network/", "category": "tweaked" },
