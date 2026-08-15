@@ -4,7 +4,6 @@
     { "url": "https://driftywinds.github.io/AltStore/apps.json", "category": "tweaked" },
     { "url": "https://raw.githubusercontent.com/titouan336/Spotify-AltStoreRepo-mirror/refs/heads/main/source.json", "category": "community" },
     { "url": "https://repos.gabrx.eu.org/cypwn.json", "category": "tweaked" },
-    { "url": "https://qnblackcat.github.io/AltStore/apps.json", "category": "community" },
     { "url": "https://wuxu1.github.io/wuxu-complete-plus.json", "category": "tweaked" },
     { "url": "https://community-apps.sidestore.io/sidecommunity.json", "category": "community" },
     { "url": "/api/proxy?repo=stikdebug", "category": "developer" },
