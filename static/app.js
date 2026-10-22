@@ -17,7 +17,7 @@ let filteredApps = [];
 let loaded = 0;
 let lastScrollY = 0;
 
-const proxy = "https://chocomilkyX.vercel.app/api/proxy?url=";
+const proxy = "https://proxy.corsfix.com/?";
 
 /* ================= app detail =================== */
 
@@ -167,7 +167,7 @@ window.addEventListener("scroll", () => {
 /* ================= fetch repos ================= */
 
 const fetchRepo = async (repo) => {
-  const url = repo.useProxy ? proxy + encodeURIComponent(repo.url) : repo.url;
+  const url = repo.useProxy ? proxy + repo.url : repo.url;
   try {
     const r = await fetch(url);
     return await r.json();
@@ -388,7 +388,7 @@ function removeUserRepo(url){
 
 async function fetchUserRepo(url,useProxy=false){
   try{
-    const fetchUrl=useProxy?proxy+encodeURIComponent(url):url;
+    const fetchUrl=useProxy?proxy+url:url;
     const res=await fetch(fetchUrl);
     if(!res.ok) throw "";
     const data=await res.json();
@@ -444,7 +444,7 @@ async function openRepo(url,useProxy){
   }
 
   try{
-    const fetchUrl=useProxy?proxy+encodeURIComponent(url):url;
+    const fetchUrl=useProxy?proxy+url:url;
     const res=await fetch(fetchUrl);
     const repo=await res.json();
 
