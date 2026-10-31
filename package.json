@@ -1,8 +1,5 @@
 {
   "name": "chocomilky-proxy",
-  "version": "1.0.0",
-  "type": "module",
-  "dependencies": {
-    "node-fetch": "^3"
-  }
+  "version": "1.1.0",
+  "type": "module"
 }
