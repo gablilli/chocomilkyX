@@ -23,9 +23,9 @@
 
 ---
 
-> [!IMPORTANT]
-> 10 feb 26 - If you have trouble with fetching repos, just clean your cache or reinstall the pwa.
-> global repos json's path was changed.
+> [!NOTE]
+> 2026-11-01 - bad actors were abusing the repo's proxy endpoint, which brought the service down.
+> I've already taken steps to block them and the library is back up and running.
 
 ## ✨ some features
 
