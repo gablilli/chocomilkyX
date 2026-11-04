@@ -352,7 +352,7 @@ async function loadRepos() {
           </div>
           <div class="repo-actions">
             <button class="openBtn" data-url="${repoMeta.url}" data-use-proxy="${repoMeta.useProxy || false}">Open</button>
-            <button class="copyBtn" data-url="${repoMeta.url}">Copy URL</button>
+            <button class="copyBtn" data-url="${repoMeta.source || repoMeta.url}">Copy URL</button>
           </div>
         `;
   
