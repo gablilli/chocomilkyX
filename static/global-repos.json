@@ -23,7 +23,6 @@
     { "url": "https://driftywinds.github.io/repos/esign.json", "category": "tweaked" },
     { "url": "https://raw.githubusercontent.com/WhySooooFurious/Ultimate-Sideloading-Guide/refs/heads/main/raw-files/app-repo.json", "category": "tweaked" },
     { "url": "https://raw.githubusercontent.com/khcrysalis/Feather/main/app-repo.json", "category": "developer" },
-    { "url": "https://repos.gabrx.eu.org/nabzclan.json", "category": "tweaked" },
     { "url": "https://gablilli.github.io/stremiorepo/index.json", "category": "community" },
     { "url": "https://flyinghead.github.io/flycast-builds/altstore.json", "category": "developer" },
     { "url": "/api/proxy?repo=thatsella", "source": "https://alt.thatstel.la/", "category": "developer" },
